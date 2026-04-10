@@ -1,0 +1,33 @@
+{
+  "_comment": "MD가 직접 수정하는 설정 파일. 코드 변경 없이 키워드/경쟁사/주기 조정 가능.",
+  "season": "26SS",
+  "target_audience": "18~25세 트렌드리더 (코어 타겟)",
+  "naver_datalab": {
+    "period_months": 3,
+    "lifestyle_keywords": [
+      { "group_name": "러닝코어", "keywords": ["러닝코어"] },
+      { "group_name": "도파민 패션", "keywords": ["도파민 패션"] },
+      { "group_name": "고프코어", "keywords": ["고프코어"] },
+      { "group_name": "올드머니룩", "keywords": ["올드머니룩"] },
+      { "group_name": "바캉스룩", "keywords": ["바캉스룩"] }
+    ],
+    "fashion_interest_keywords": [
+      { "group_name": "스트릿패션", "keywords": ["스트릿패션"] },
+      { "group_name": "Y2K패션", "keywords": ["Y2K패션"] },
+      { "group_name": "미니멀룩", "keywords": ["미니멀룩"] },
+      { "group_name": "키치룩", "keywords": ["키치룩"] },
+      { "group_name": "레트로패션", "keywords": ["레트로패션"] }
+    ],
+    "item_type_keywords": [
+      { "group_name": "크롭탑", "keywords": ["크롭탑"] },
+      { "group_name": "와이드팬츠", "keywords": ["와이드팬츠"] },
+      { "group_name": "그래픽티", "keywords": ["그래픽티"] },
+      { "group_name": "볼캡", "keywords": ["볼캡"] },
+      { "group_name": "메시탑", "keywords": ["메시탑"] }
+    ]
+  },
+  "report": {
+    "output_base": "output/26SS/_season",
+    "filename_prefix": "plan_market-intel-weekly"
+  }
+}

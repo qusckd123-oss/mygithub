@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비케이브 AX 전략 — 경영진 보고서</title>
+
+    <!-- Fonts: Pretendard for Korean + Plus Jakarta Sans for English -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=plus-jakarta-sans@400,500,600,700,800&display=swap">
+
+    <style>
+        /* ===========================================
+           THEME: Bold Signal — Light Mode
+           Confident, high-impact executive presentation
+           Deep navy accents on clean white
+           =========================================== */
+        :root {
+            /* Colors — Light Bold Signal */
+            --bg-primary: #FAFBFC;
+            --bg-slide: #FFFFFF;
+            --bg-card: #F1F4F9;
+            --bg-accent: #0F1B3D;
+            --bg-accent-2: #1A2F6B;
+            --bg-highlight: #E8F0FE;
+            --text-primary: #0F1B3D;
+            --text-secondary: #4A5568;
+            --text-muted: #8896AB;
+            --text-on-accent: #FFFFFF;
+            --accent: #2563EB;
+            --accent-warm: #F97316;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --border: #E2E8F0;
+            --border-accent: rgba(37, 99, 235, 0.2);
+
+            /* Typography — clamp() for responsive scaling */
+            --font-display: 'Pretendard Variable', 'Plus Jakarta Sans', system-ui, sans-serif;
+            --font-body: 'Pretendard Variable', 'Plus Jakarta Sans', system-ui, sans-serif;
+            --font-mono: 'SF Mono', 'Fira Code', monospace;
+
+            --title-size: clamp(1.8rem, 5vw, 3.5rem);
+            --h2-size: clamp(1.3rem, 3.5vw, 2.2rem);
+            --h3-size: clamp(1rem, 2.5vw, 1.5rem);
+            --body-size: clamp(0.8rem, 1.4vw, 1.05rem);
+            --small-size: clamp(0.7rem, 1vw, 0.85rem);
+            --label-size: clamp(0.6rem, 0.9vw, 0.75rem);
+
+            /* Spacing */
+            --slide-padding: clamp(1.5rem, 4vw, 4rem);
+            --content-gap: clamp(0.8rem, 2vw, 1.8rem);
+            --element-gap: clamp(0.3rem, 0.8vw, 0.6rem);
+            --card-padding: clamp(0.8rem, 2vw, 1.5rem);
+            --card-radius: clamp(8px, 1.2vw, 16px);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --duration: 0.7s;
+        }
+
+        /* ===========================================
+           BASE STYLES
+           =========================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            height: 100%;
+            -webkit-font-smoothing: antialiased;
+            font-feature-settings: 'ss01', 'ss02';
+        }
+
+        /* ===========================================
+           SLIDE CONTAINER
+           Each slide = exactly one viewport
+           =========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: var(--bg-slide);
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===========================================
+           PROGRESS BAR
+           =========================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+            z-index: 1000;
+            transition: width 0.3s var(--ease-out-expo);
+            width: 0%;
+        }
+
+        /* ===========================================
+           SLIDE NUMBER
+           =========================================== */
+        .slide-number {
+            position: absolute;
+            bottom: clamp(0.8rem, 2vw, 1.5rem);
+            right: clamp(1rem, 3vw, 2rem);
+            font-size: var(--label-size);
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            z-index: 5;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .slide--dark .slide-number {
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* ===========================================
+           NAV DOTS
+           =========================================== */
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.5rem, 1.5vw, 1.2rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 999;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out-expo);
+            border: none;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            background: var(--accent);
+            transform: scale(1.3);
+        }
+
+        .nav-dot:hover {
+            background: var(--accent);
+            transform: scale(1.2);
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        .slide-label {
+            font-size: var(--label-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.6rem);
+        }
+
+        .slide--dark .slide-label {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .slide-title {
+            font-size: var(--h2-size);
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: clamp(0.5rem, 1.2vw, 1rem);
+            letter-spacing: -0.02em;
+        }
+
+        .slide--dark .slide-title {
+            color: var(--text-on-accent);
+        }
+
+        .slide-subtitle {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 680px;
+        }
+
+        .slide--dark .slide-subtitle {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* ===========================================
+           TITLE SLIDE
+           =========================================== */
+        .slide--title {
+            background: var(--bg-accent);
+            justify-content: center;
+        }
+
+        .title-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 100px;
+            padding: clamp(4px, 0.5vw, 6px) clamp(10px, 1.5vw, 16px);
+            font-size: var(--label-size);
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+            margin-bottom: clamp(0.8rem, 2vw, 1.5rem);
+            width: fit-content;
+        }
+
+        .title-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse-dot 2s ease infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero-title {
+            font-size: var(--title-size);
+            font-weight: 800;
+            color: var(--text-on-accent);
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: clamp(0.5rem, 1.5vw, 1.2rem);
+            max-width: 800px;
+        }
+
+        .hero-title .accent-text {
+            background: linear-gradient(135deg, #60A5FA, #38BDF8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: clamp(0.85rem, 1.5vw, 1.15rem);
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 500px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: clamp(1rem, 3vw, 2rem);
+            margin-top: clamp(1.2rem, 3vw, 2.5rem);
+        }
+
+        .hero-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .hero-meta-label {
+            font-size: var(--label-size);
+            color: rgba(255,255,255,0.35);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .hero-meta-value {
+            font-size: var(--small-size);
+            color: rgba(255,255,255,0.7);
+            font-weight: 600;
+        }
+
+        /* ===========================================
+           QUOTE SLIDE
+           =========================================== */
+        .quote-block {
+            position: relative;
+            padding-left: clamp(1rem, 3vw, 2rem);
+            border-left: 3px solid var(--accent);
+            max-width: 700px;
+        }
+
+        .quote-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.5rem);
+        }
+
+        .quote-attr {
+            font-size: var(--small-size);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ===========================================
+           CARDS
+           =========================================== */
+        .card-grid {
+            display: grid;
+            gap: clamp(0.5rem, 1.2vw, 1rem);
+            margin-top: clamp(0.5rem, 1.5vw, 1.2rem);
+        }
+
+        .card-grid--2 { grid-template-columns: repeat(2, 1fr); }
+        .card-grid--3 { grid-template-columns: repeat(3, 1fr); }
+        .card-grid--4 { grid-template-columns: repeat(4, 1fr); }
+        .card-grid--5 { grid-template-columns: repeat(5, 1fr); }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--card-radius);
+            padding: var(--card-padding);
+            border: 1px solid var(--border);
+            transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+
+        .card-icon {
+            width: clamp(28px, 3vw, 40px);
+            height: clamp(28px, 3vw, 40px);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(14px, 1.5vw, 20px);
+            margin-bottom: clamp(0.4rem, 0.8vw, 0.7rem);
+            color: white;
+        }
+
+        .card-title {
+            font-size: var(--body-size);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: clamp(0.2rem, 0.4vw, 0.3rem);
+            line-height: 1.3;
+        }
+
+        .card-desc {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Card accent colors */
+        .card-icon--blue { background: var(--accent); }
+        .card-icon--green { background: var(--accent-green); }
+        .card-icon--orange { background: var(--accent-warm); }
+        .card-icon--red { background: var(--accent-red); }
+        .card-icon--navy { background: var(--bg-accent); }
+
+        /* ===========================================
+           DARK SLIDE VARIANT
+           =========================================== */
+        .slide--dark {
+            background: var(--bg-accent);
+        }
+
+        .slide--dark .card {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .slide--dark .card:hover {
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .slide--dark .card-title {
+            color: var(--text-on-accent);
+        }
+
+        .slide--dark .card-desc {
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* ===========================================
+           ACCENT SLIDE VARIANT
+           =========================================== */
+        .slide--accent {
+            background: linear-gradient(135deg, #1E40AF 0%, #1A2F6B 100%);
+        }
+
+        /* ===========================================
+           TABLES
+           =========================================== */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: clamp(0.5rem, 1vw, 0.8rem);
+            font-size: var(--small-size);
+        }
+
+        .data-table th {
+            background: var(--bg-accent);
+            color: var(--text-on-accent);
+            padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.5rem, 1vw, 0.8rem);
+            text-align: left;
+            font-weight: 600;
+            font-size: var(--label-size);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table th:first-child { border-radius: var(--card-radius) 0 0 0; }
+        .data-table th:last-child { border-radius: 0 var(--card-radius) 0 0; }
+
+        .data-table td {
+            padding: clamp(0.35rem, 0.7vw, 0.55rem) clamp(0.5rem, 1vw, 0.8rem);
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table td strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .data-table .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ===========================================
+           LAYERS / DIAGRAM
+           =========================================== */
+        .layer-stack {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            margin-top: clamp(0.6rem, 1.5vw, 1rem);
+            max-width: 700px;
+        }
+
+        .layer {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.6rem, 1.5vw, 1rem);
+            padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.8rem, 1.5vw, 1.2rem);
+            border-radius: var(--card-radius);
+            border-left: 4px solid;
+            background: var(--bg-card);
+        }
+
+        .layer--3 { border-color: var(--accent); }
+        .layer--2 { border-color: var(--accent-warm); }
+        .layer--1 { border-color: var(--accent-green); }
+
+        .layer-num {
+            font-size: clamp(0.7rem, 1vw, 0.9rem);
+            font-weight: 800;
+            width: clamp(24px, 2.5vw, 32px);
+            height: clamp(24px, 2.5vw, 32px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .layer--3 .layer-num { background: var(--accent); color: white; }
+        .layer--2 .layer-num { background: var(--accent-warm); color: white; }
+        .layer--1 .layer-num { background: var(--accent-green); color: white; }
+
+        .layer-info { flex: 1; }
+
+        .layer-name {
+            font-size: var(--body-size);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .layer-desc {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+        }
+
+        /* ===========================================
+           PHASE CARDS (Timeline)
+           =========================================== */
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.5rem, 1vw, 0.8rem);
+            margin-bottom: clamp(0.4rem, 1vw, 0.6rem);
+        }
+
+        .phase-badge {
+            padding: clamp(3px, 0.3vw, 4px) clamp(8px, 1vw, 12px);
+            border-radius: 100px;
+            font-size: var(--label-size);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .phase-badge--1 { background: #DBEAFE; color: #1E40AF; }
+        .phase-badge--2 { background: #FEF3C7; color: #92400E; }
+        .phase-badge--3 { background: #D1FAE5; color: #065F46; }
+
+        .phase-period {
+            font-size: var(--label-size);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .phase-goal {
+            font-size: var(--body-size);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: clamp(0.3rem, 0.6vw, 0.5rem);
+        }
+
+        .action-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.15rem, 0.3vw, 0.25rem);
+        }
+
+        .action-list li {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            padding-left: clamp(0.8rem, 1.2vw, 1rem);
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .action-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5em;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .action-list li strong {
+            color: var(--text-primary);
+        }
+
+        /* ===========================================
+           TAG / BADGE
+           =========================================== */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: clamp(2px, 0.3vw, 4px) clamp(6px, 0.8vw, 10px);
+            border-radius: 100px;
+            font-size: var(--label-size);
+            font-weight: 600;
+        }
+
+        .tag--low { background: #D1FAE5; color: #065F46; }
+        .tag--min { background: #DBEAFE; color: #1E40AF; }
+        .tag--risk { background: #FEE2E2; color: #991B1B; }
+
+        /* ===========================================
+           COMPARISON COLUMNS
+           =========================================== */
+        .compare-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 40px 1fr;
+            gap: clamp(0.3rem, 0.8vw, 0.5rem);
+            align-items: center;
+            padding: clamp(0.5rem, 1vw, 0.8rem) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .compare-label {
+            font-size: var(--body-size);
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .compare-arrow {
+            font-size: var(--body-size);
+            color: var(--accent-warm);
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .compare-cell {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .compare-cell--to {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ===========================================
+           DECISION TABLE
+           =========================================== */
+        .decision-item {
+            display: grid;
+            grid-template-columns: clamp(24px, 2.5vw, 32px) 1fr auto;
+            gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            align-items: start;
+            padding: clamp(0.5rem, 1vw, 0.7rem) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .decision-num {
+            width: clamp(24px, 2.5vw, 32px);
+            height: clamp(24px, 2.5vw, 32px);
+            border-radius: 50%;
+            background: var(--bg-accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--label-size);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .decision-content { flex: 1; }
+
+        .decision-title {
+            font-size: var(--body-size);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .decision-options {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+        }
+
+        .decision-rec {
+            font-size: var(--small-size);
+            font-weight: 700;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        /* ===========================================
+           CLOSING SLIDE
+           =========================================== */
+        .closing-text {
+            font-size: clamp(1rem, 2.2vw, 1.6rem);
+            font-weight: 500;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        .closing-text strong {
+            color: white;
+            font-weight: 700;
+        }
+
+        .closing-text .highlight-line {
+            font-size: clamp(1.2rem, 2.8vw, 2rem);
+            font-weight: 800;
+            color: white;
+            display: block;
+            margin-top: clamp(0.8rem, 2vw, 1.5rem);
+        }
+
+        /* ===========================================
+           DECORATIVE ELEMENTS
+           =========================================== */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(15, 27, 61, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 27, 61, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            width: clamp(200px, 40vw, 500px);
+            height: clamp(200px, 40vw, 500px);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.07;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-gradient--blue {
+            background: var(--accent);
+            top: -20%;
+            right: -10%;
+        }
+
+        .bg-gradient--orange {
+            background: var(--accent-warm);
+            bottom: -20%;
+            left: -10%;
+        }
+
+        /* ===========================================
+           ANIMATIONS — Scroll triggered
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity var(--duration) var(--ease-out-expo),
+                        transform var(--duration) var(--ease-out-expo);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-25px);
+            transition: opacity var(--duration) var(--ease-out-expo),
+                        transform var(--duration) var(--ease-out-expo);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity var(--duration) var(--ease-out-expo),
+                        transform var(--duration) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal,
+        .slide.visible .reveal-left,
+        .slide.visible .reveal-scale {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        /* Stagger children */
+        .reveal:nth-child(1), .reveal-scale:nth-child(1) { transition-delay: 0.05s; }
+        .reveal:nth-child(2), .reveal-scale:nth-child(2) { transition-delay: 0.12s; }
+        .reveal:nth-child(3), .reveal-scale:nth-child(3) { transition-delay: 0.19s; }
+        .reveal:nth-child(4), .reveal-scale:nth-child(4) { transition-delay: 0.26s; }
+        .reveal:nth-child(5), .reveal-scale:nth-child(5) { transition-delay: 0.33s; }
+        .reveal:nth-child(6), .reveal-scale:nth-child(6) { transition-delay: 0.40s; }
+
+        /* Counter animation */
+        .counter { font-variant-numeric: tabular-nums; }
+
+        /* ===========================================
+           RESPONSIVE BREAKPOINTS
+           =========================================== */
+        @media (max-width: 768px) {
+            .card-grid--3 { grid-template-columns: repeat(2, 1fr); }
+            .card-grid--4 { grid-template-columns: repeat(2, 1fr); }
+            .card-grid--5 { grid-template-columns: repeat(2, 1fr); }
+            .compare-row { grid-template-columns: 60px 1fr 30px 1fr; }
+            .hero-meta { flex-direction: column; gap: 0.5rem; }
+        }
+
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(1rem, 3vw, 2.5rem);
+                --content-gap: clamp(0.5rem, 1.2vw, 1rem);
+                --card-padding: clamp(0.5rem, 1.2vw, 1rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.8rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.7rem);
+                --title-size: clamp(1.3rem, 4vw, 2.2rem);
+                --h2-size: clamp(1.1rem, 3vw, 1.6rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            }
+            .nav-dots { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2vw, 1rem);
+                --h2-size: clamp(0.95rem, 2.5vw, 1.3rem);
+                --body-size: clamp(0.65rem, 1vw, 0.8rem);
+            }
+        }
+
+        /* ===========================================
+           REDUCED MOTION
+           =========================================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===========================================
+           KEYBOARD HINT
+           =========================================== */
+        .keyboard-hint {
+            position: fixed;
+            bottom: clamp(0.8rem, 2vw, 1.2rem);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--label-size);
+            color: var(--text-muted);
+            z-index: 999;
+            opacity: 1;
+            transition: opacity 1s ease;
+            pointer-events: none;
+        }
+
+        .keyboard-hint.hidden { opacity: 0; }
+
+        .keyboard-hint kbd {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            font-family: var(--font-mono);
+            font-size: 0.85em;
+            margin: 0 2px;
+        }
+
+        /* Stat number highlight */
+        .stat-num {
+            font-size: clamp(1.5rem, 4vw, 2.8rem);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: clamp(0.1rem, 0.3vw, 0.2rem);
+        }
+
+        .stat-num--blue { color: var(--accent); }
+        .stat-num--green { color: var(--accent-green); }
+        .stat-num--orange { color: var(--accent-warm); }
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation Dots -->
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <!-- Keyboard Hint -->
+    <div class="keyboard-hint" id="keyboardHint">
+        <kbd>&larr;</kbd> <kbd>&rarr;</kbd> 또는 스크롤로 탐색
+    </div>
+
+    <!-- ==========================================
+         SLIDE 1: TITLE
+         ========================================== -->
+    <section class="slide slide--title" data-slide="0">
+        <div class="slide-content">
+            <div class="title-badge reveal">EXECUTIVE BRIEFING &mdash; 2026.03</div>
+            <h1 class="hero-title reveal">
+                비케이브 <span class="accent-text">AX 전략</span><br>
+                경영진 보고서
+            </h1>
+            <p class="hero-sub reveal">"AI를 사용하는 조직이 아니라,<br>AI를 기반으로 일하는 조직이 되어야 합니다."</p>
+            <div class="hero-meta reveal">
+                <div class="hero-meta-item">
+                    <span class="hero-meta-label">보고 대상</span>
+                    <span class="hero-meta-value">대표이사 / 본부장 / 사업부장</span>
+                </div>
+                <div class="hero-meta-item">
+                    <span class="hero-meta-label">작성</span>
+                    <span class="hero-meta-value">FPOF AI 전략기획실</span>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">01 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 2: WHY AX NOW
+         ========================================== -->
+    <section class="slide" data-slide="1">
+        <div class="bg-grid"></div>
+        <div class="bg-gradient bg-gradient--blue"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">01 &mdash; BACKGROUND</span>
+            <h2 class="slide-title reveal">왜 지금 AX인가</h2>
+            <div class="quote-block reveal" style="margin-bottom: clamp(0.8rem, 2vw, 1.5rem);">
+                <p class="quote-text" style="font-size: clamp(0.95rem, 2vw, 1.3rem);">"업무 경쟁력 = 업(業) 이해 + AI 실행력"</p>
+                <span class="quote-attr">대표이사</span>
+            </div>
+            <p class="slide-subtitle reveal" style="margin-bottom: clamp(0.5rem, 1.2vw, 1rem);">
+                중견 패션사가 선제적 AX를 하지 않으면<br>경쟁력 확보의 기회를 놓칩니다.
+            </p>
+        </div>
+        <span class="slide-number">02 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 3: GLOBAL COMPETITORS
+         ========================================== -->
+    <section class="slide" data-slide="2">
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">01 &mdash; BACKGROUND</span>
+            <h2 class="slide-title reveal">패션 산업 AI 전환 현황</h2>
+            <div class="card-grid card-grid--4 reveal">
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--navy">Z</div>
+                    <div class="card-title">Zara</div>
+                    <div class="card-desc">AI 수요 예측 + 재고 최적화로 폐기율 30% 감축, AI 촬영 도입</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--red">H</div>
+                    <div class="card-title">H&M</div>
+                    <div class="card-desc">AI 클론 모델 마케팅, 수요 예측으로 재고 최적화</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--orange">S</div>
+                    <div class="card-title">SHEIN</div>
+                    <div class="card-desc">SNS 트렌드 → 3일 제작, 일 수천 신상품 출시</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--blue">KR</div>
+                    <div class="card-title">국내</div>
+                    <div class="card-desc">삼성물산·LF·한섬 AI 전환 본격화, '젠시' CES 최고혁신상</div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">03 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 4: 비케이브 강점
+         ========================================== -->
+    <section class="slide" data-slide="3">
+        <div class="bg-grid"></div>
+        <div class="bg-gradient bg-gradient--orange"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">02 &mdash; POSITION</span>
+            <h2 class="slide-title reveal">비케이브의 AX 강점</h2>
+            <div class="card-grid card-grid--5 reveal">
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--blue">1</div>
+                    <div class="card-title">CEO 톱다운 의지</div>
+                    <div class="card-desc">AX 추진의 최대 동력, 조직 저항 극복</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--green">2</div>
+                    <div class="card-title">BTA 공통 언어</div>
+                    <div class="card-desc">P-M-D 부서 간 표준 프레임워크 → AI 학습 기반</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--orange">3</div>
+                    <div class="card-title">FPOF 프로토타입</div>
+                    <div class="card-desc">와키윌리 검증 완료 → 전사 확장 템플릿</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--navy">4</div>
+                    <div class="card-title">PDCA 사이클</div>
+                    <div class="card-desc">반복 구조 → AI 자동화에 최적</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--red">5</div>
+                    <div class="card-title">강소기업 규모</div>
+                    <div class="card-desc">영업이익 220억, 대기업보다 빨리 움직일 수 있음</div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">04 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 5: 과제
+         ========================================== -->
+    <section class="slide" data-slide="4">
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">02 &mdash; POSITION</span>
+            <h2 class="slide-title reveal">현실 과제 &amp; 대응 프레이밍</h2>
+            <div class="card-grid card-grid--3 reveal">
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--red">!</div>
+                    <div class="card-title">데이터 인프라 미흡</div>
+                    <div class="card-desc" style="margin-bottom: clamp(0.3rem, 0.5vw, 0.4rem);">CEO 인정한 현실</div>
+                    <div class="tag tag--low" style="font-size: var(--label-size);">&#10003; "있는 데이터로 즉시 시작"</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--orange">!</div>
+                    <div class="card-title">IT 전담 인력 부족</div>
+                    <div class="card-desc" style="margin-bottom: clamp(0.3rem, 0.5vw, 0.4rem);">별도 IT팀 없음</div>
+                    <div class="tag tag--low" style="font-size: var(--label-size);">&#10003; 현장 챔피언 + FPOF 시스템</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--navy">!</div>
+                    <div class="card-title">"패션은 감이야" 문화</div>
+                    <div class="card-desc" style="margin-bottom: clamp(0.3rem, 0.5vw, 0.4rem);">변화 저항 요소</div>
+                    <div class="tag tag--low" style="font-size: var(--label-size);">&#10003; "감을 없애지 않고 근거를 더함"</div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">05 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 6: 핵심 전략 3레이어
+         ========================================== -->
+    <section class="slide" data-slide="5">
+        <div class="bg-grid"></div>
+        <div class="bg-gradient bg-gradient--blue"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">03 &mdash; STRATEGY</span>
+            <h2 class="slide-title reveal">핵심 전략: 행동 변화 3레이어</h2>
+            <p class="slide-subtitle reveal" style="margin-bottom: clamp(0.6rem, 1.5vw, 1rem);">
+                AX &ne; 도구 도입 &nbsp;&nbsp;&mdash;&nbsp;&nbsp; AX = <strong>행동 변화</strong>
+            </p>
+            <div class="layer-stack">
+                <div class="layer layer--3 reveal">
+                    <span class="layer-num">3</span>
+                    <div class="layer-info">
+                        <div class="layer-name">조직 시스템</div>
+                        <div class="layer-desc">데이터 기반 의사결정, 프로세스 자동화</div>
+                    </div>
+                </div>
+                <div class="layer layer--2 reveal">
+                    <span class="layer-num">2</span>
+                    <div class="layer-info">
+                        <div class="layer-name">팀 워크플로우</div>
+                        <div class="layer-desc">P-M-D별 AI 에이전트, BTA 통합 AI 연동</div>
+                    </div>
+                </div>
+                <div class="layer layer--1 reveal">
+                    <span class="layer-num">1</span>
+                    <div class="layer-info">
+                        <div class="layer-name">개인 역량</div>
+                        <div class="layer-desc">AI 리터러시, 도파민 경험, 챔피언 육성</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">06 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 7: 챔피언 + 도파민
+         ========================================== -->
+    <section class="slide slide--dark" data-slide="6">
+        <div class="slide-content">
+            <span class="slide-label reveal">03 &mdash; STRATEGY</span>
+            <h2 class="slide-title reveal">핵심 메커니즘: 챔피언 + 도파민</h2>
+            <div class="card-grid card-grid--3 reveal" style="margin-top: clamp(0.8rem, 2vw, 1.5rem);">
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--green" style="font-size: clamp(16px, 1.8vw, 22px);">&#9733;</div>
+                    <div class="card-title">챔피언 발굴</div>
+                    <div class="card-desc">집체 교육은 비효율. 의지 높은 <strong style="color: #60A5FA;">1-2명/부서</strong>를 먼저 변화시킴</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--orange" style="font-size: clamp(16px, 1.8vw, 22px);">&#9889;</div>
+                    <div class="card-title">FOMO 확산</div>
+                    <div class="card-desc">챔피언의 성과가 동료에게 <strong style="color: #60A5FA;">자발적 FOMO</strong> 유발 → 확산</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-icon card-icon--blue" style="font-size: clamp(16px, 1.8vw, 22px);">&#8645;</div>
+                    <div class="card-title">톱다운 + 바텀업</div>
+                    <div class="card-desc"><strong style="color: #60A5FA;">CEO 방향(톱다운)</strong> + <strong style="color: #60A5FA;">챔피언(바텀업)</strong> = 가장 효과적</div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">07 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 8: Phase 1 — Quick Win
+         ========================================== -->
+    <section class="slide" data-slide="7">
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <div class="phase-header reveal">
+                <span class="phase-badge phase-badge--1">PHASE 1</span>
+                <span class="phase-period">Quick Win &mdash; 4~6월 (3개월)</span>
+            </div>
+            <p class="phase-goal reveal">AI 도파민 경험, 챔피언 발굴, 즉각적 효율 개선</p>
+            <div class="card-grid card-grid--3 reveal">
+                <div class="card reveal-scale">
+                    <div class="card-title">챔피언 모집</div>
+                    <div class="card-desc">부서별 1-2명, 총 10-15명 자발적 변화 리더 확보</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-title">AI 리터러시 교육</div>
+                    <div class="card-desc">전 직원 L1 교육 (2시간), 기본 이해도 확보</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-title">주간 매출 리포트 자동화</div>
+                    <div class="card-desc">주 2시간 → 15분으로 단축</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-title">회의록 AI 자동 정리</div>
+                    <div class="card-desc">즉시 액션 아이템 생성</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-title">경쟁사 SNS 모니터링</div>
+                    <div class="card-desc">매일 3사 자동 수집·요약</div>
+                </div>
+                <div class="card reveal-scale">
+                    <div class="card-title">문제은행 개설</div>
+                    <div class="card-desc">Teams #ax-문제은행 — 현장 문제 발굴</div>
+                </div>
+            </div>
+            <div class="reveal" style="display: flex; gap: clamp(0.5rem, 1.5vw, 1rem); margin-top: clamp(0.4rem, 1vw, 0.7rem);">
+                <span class="tag tag--min">투자: 최소</span>
+                <span class="tag tag--low">리스크: 낮음</span>
+            </div>
+        </div>
+        <span class="slide-number">08 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 9: Phase 2 — 정착
+         ========================================== -->
+    <section class="slide" data-slide="8">
+        <div class="bg-grid"></div>
+        <div class="bg-gradient bg-gradient--orange"></div>
+        <div class="slide-content">
+            <div class="phase-header reveal">
+                <span class="phase-badge phase-badge--2">PHASE 2</span>
+                <span class="phase-period">정착 &mdash; 7~12월 (6개월)</span>
+            </div>
+            <p class="phase-goal reveal">AI 에이전트 구축, 데이터 인프라, 커버낫 FPOF 확장</p>
+            <ul class="action-list reveal" style="margin-top: clamp(0.3rem, 0.8vw, 0.5rem);">
+                <li class="reveal"><strong>부서별 AI 에이전트 5-8개</strong> 구축 → 반복 업무 50-80% 자동화</li>
+                <li class="reveal"><strong>데이터 표준화</strong> — BTA 통합시트 디지털화 → AI 분석 기반 확보</li>
+                <li class="reveal"><strong>FPOF 커버낫 확장</strong> — 대표 브랜드 AI 오케스트레이션 도입</li>
+                <li class="reveal"><strong>27SS AI 트렌드 분석</strong> 첫 적용 → 데이터 기반 BTA 설계</li>
+                <li class="reveal"><strong>AI 기반 주간 리뷰</strong> 프로세스 전면 도입 → 실시간 의사결정 지원</li>
+            </ul>
+        </div>
+        <span class="slide-number">09 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 10: Phase 3 — 확산
+         ========================================== -->
+    <section class="slide" data-slide="9">
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <div class="phase-header reveal">
+                <span class="phase-badge phase-badge--3">PHASE 3</span>
+                <span class="phase-period">확산 &mdash; 2027년 (12개월)</span>
+            </div>
+            <p class="phase-goal reveal">전 브랜드 FPOF, AI 네이티브 의사결정, 비즈니스 임팩트</p>
+            <div class="card-grid card-grid--4 reveal" style="margin-top: clamp(0.3rem, 0.8vw, 0.5rem);">
+                <div class="card reveal-scale" style="text-align: center;">
+                    <div class="stat-num stat-num--blue">3+</div>
+                    <div class="card-title">브랜드 AI 운영</div>
+                    <div class="card-desc">와키윌리 → 커버낫 → 리</div>
+                </div>
+                <div class="card reveal-scale" style="text-align: center;">
+                    <div class="stat-num stat-num--green">15%</div>
+                    <div class="card-title">재고 효율 개선</div>
+                    <div class="card-desc">AI 수요 예측 v1 (베이직)</div>
+                </div>
+                <div class="card reveal-scale" style="text-align: center;">
+                    <div class="stat-num stat-num--orange">30%</div>
+                    <div class="card-title">기획 리드타임 단축</div>
+                    <div class="card-desc">AI 네이티브 시즌 기획</div>
+                </div>
+                <div class="card reveal-scale" style="text-align: center;">
+                    <div class="stat-num stat-num--blue">&#10003;</div>
+                    <div class="card-title">AI 거버넌스</div>
+                    <div class="card-desc">데이터 보안·사용 기준 확립</div>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">10 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 11: P-M-D 임팩트
+         ========================================== -->
+    <section class="slide" data-slide="10">
+        <div class="bg-grid"></div>
+        <div class="bg-gradient bg-gradient--blue"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">05 &mdash; IMPACT</span>
+            <h2 class="slide-title reveal">P-M-D 임팩트 요약</h2>
+            <div style="margin-top: clamp(0.3rem, 0.8vw, 0.5rem);">
+                <div class="compare-row reveal">
+                    <span class="compare-label">P 상품</span>
+                    <span class="compare-cell">BTA 비율 감 기반 설정, CAD 수작업 체크</span>
+                    <span class="compare-arrow">&rarr;</span>
+                    <span class="compare-cell compare-cell--to">AI 시뮬레이션 BTA 설계, 자동 3B 감지 — <strong style="color: var(--accent);">기획 시간 60% 단축</strong></span>
+                </div>
+                <div class="compare-row reveal">
+                    <span class="compare-label">M 마케팅</span>
+                    <span class="compare-cell">B.A.M.P 수작업 검증, SNS 균형 감각 의존</span>
+                    <span class="compare-arrow">&rarr;</span>
+                    <span class="compare-cell compare-cell--to">AI 자동 검증, 3균형 모니터링, 카피 초안 — <strong style="color: var(--accent);">콘텐츠 생산 2배</strong></span>
+                </div>
+                <div class="compare-row reveal" style="border-bottom: none;">
+                    <span class="compare-label">D 유통</span>
+                    <span class="compare-cell">매장 사진 → 구두 피드백</span>
+                    <span class="compare-arrow">&rarr;</span>
+                    <span class="compare-cell compare-cell--to">AI 사진 분석 → 자동 VM 스코어 — <strong style="color: var(--accent);">라운딩 효율 60% 향상</strong></span>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">11 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 12: 성공 지표
+         ========================================== -->
+    <section class="slide" data-slide="11">
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">06 &mdash; KPI</span>
+            <h2 class="slide-title reveal">성공 지표 (Phase별)</h2>
+            <table class="data-table reveal" style="margin-top: clamp(0.3rem, 0.8vw, 0.5rem);">
+                <thead>
+                    <tr>
+                        <th style="width: 90px;">Phase</th>
+                        <th>핵심 KPI</th>
+                        <th style="width: 200px;">목표</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="reveal">
+                        <td><strong>Phase 1</strong></td>
+                        <td>챔피언 활성화, AI 활용 건수, Quick Win 완료율</td>
+                        <td class="highlight">부서당 1명+, 50건/분기, 80%</td>
+                    </tr>
+                    <tr class="reveal">
+                        <td><strong>Phase 2</strong></td>
+                        <td>리포트 시간 단축, AI 에이전트 수, 데이터 의사결정 비율</td>
+                        <td class="highlight">50%&darr;, 8개+, 40%+</td>
+                    </tr>
+                    <tr class="reveal">
+                        <td><strong>Phase 3</strong></td>
+                        <td>재고 효율, 콘텐츠 속도, 기획 리드타임, 전사 AI 활용률</td>
+                        <td class="highlight">15%&uarr;, 2배, 30%&darr;, 70%+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <span class="slide-number">12 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 13: 투자 & 리소스
+         ========================================== -->
+    <section class="slide" data-slide="12">
+        <div class="bg-grid"></div>
+        <div class="bg-gradient bg-gradient--orange"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">07 &mdash; INVESTMENT</span>
+            <h2 class="slide-title reveal">투자 &amp; 리소스 요청</h2>
+            <table class="data-table reveal" style="margin-top: clamp(0.3rem, 0.8vw, 0.5rem);">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">항목</th>
+                        <th>Phase 1</th>
+                        <th>Phase 2</th>
+                        <th>Phase 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="reveal">
+                        <td><strong>인력</strong></td>
+                        <td>전략기획 AX 리드 겸임 1명</td>
+                        <td>AX 리드 전담 전환 검토</td>
+                        <td>유지 or 확대</td>
+                    </tr>
+                    <tr class="reveal">
+                        <td><strong>예산</strong></td>
+                        <td class="highlight">최소 (기존 도구 활용)</td>
+                        <td>AI 솔루션 라이선스, 외부 교육비</td>
+                        <td>데이터 인프라 투자</td>
+                    </tr>
+                    <tr class="reveal">
+                        <td><strong>시간</strong></td>
+                        <td>챔피언: 주 2-3시간</td>
+                        <td>챔피언: 주 3-5시간</td>
+                        <td>일상 업무 통합</td>
+                    </tr>
+                    <tr class="reveal">
+                        <td><strong>외부</strong></td>
+                        <td>AI 리터러시 강사 (1회)</td>
+                        <td>데이터 표준화 컨설팅</td>
+                        <td>수요 예측 솔루션</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="reveal" style="margin-top: clamp(0.5rem, 1vw, 0.8rem); font-size: var(--body-size); color: var(--accent); font-weight: 700;">
+                Phase 1은 추가 예산 거의 불필요 &mdash; CEO의 방향 설정 + 내부 의지가 핵심 투자
+            </p>
+        </div>
+        <span class="slide-number">13 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 14: 의사결정 요청
+         ========================================== -->
+    <section class="slide" data-slide="13">
+        <div class="bg-grid"></div>
+        <div class="slide-content">
+            <span class="slide-label reveal">08 &mdash; DECISION</span>
+            <h2 class="slide-title reveal">의사결정 요청 사항</h2>
+            <div style="margin-top: clamp(0.3rem, 0.8vw, 0.5rem);">
+                <div class="decision-item reveal">
+                    <span class="decision-num">1</span>
+                    <div class="decision-content">
+                        <div class="decision-title">AX 킥오프 시기</div>
+                        <div class="decision-options">A. 즉시 (4월) / B. 27SS 기획 맞춰 (5월)</div>
+                    </div>
+                    <span class="decision-rec">추천: A. 즉시</span>
+                </div>
+                <div class="decision-item reveal">
+                    <span class="decision-num">2</span>
+                    <div class="decision-content">
+                        <div class="decision-title">AX 리드 지정</div>
+                        <div class="decision-options">A. 전략기획실 겸임 / B. 전담 채용</div>
+                    </div>
+                    <span class="decision-rec">추천: A. 겸임 &rarr; 전담</span>
+                </div>
+                <div class="decision-item reveal">
+                    <span class="decision-num">3</span>
+                    <div class="decision-content">
+                        <div class="decision-title">FPOF 전사 확장 순서</div>
+                        <div class="decision-options">와키윌리(진행중) &rarr; 커버낫 &rarr; 리</div>
+                    </div>
+                    <span class="decision-rec">확정 요청</span>
+                </div>
+                <div class="decision-item reveal">
+                    <span class="decision-num">4</span>
+                    <div class="decision-content">
+                        <div class="decision-title">챔피언 인센티브</div>
+                        <div class="decision-options">A. 평가 반영 / B. 별도 보상 / C. 결합</div>
+                    </div>
+                    <span class="decision-rec">추천: C. 결합</span>
+                </div>
+                <div class="decision-item reveal" style="border-bottom: none;">
+                    <span class="decision-num">5</span>
+                    <div class="decision-content">
+                        <div class="decision-title">문제은행 운영 채널</div>
+                        <div class="decision-options">A. Teams / B. 전용 앱 / C. 기존 도구</div>
+                    </div>
+                    <span class="decision-rec">추천: A. Teams</span>
+                </div>
+            </div>
+        </div>
+        <span class="slide-number">14 / 15</span>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 15: CLOSING
+         ========================================== -->
+    <section class="slide slide--dark slide--title" data-slide="14">
+        <div class="slide-content" style="justify-content: center;">
+            <span class="slide-label reveal" style="color: rgba(255,255,255,0.4);">SUMMARY</span>
+            <div class="closing-text reveal">
+                비케이브의 AX는<br>
+                <strong>"패션을 잘 아는 사람 + AI"</strong>의 결합입니다.<br><br>
+                감(感)을 없애는 것이 아니라,<br>
+                감에 <strong>데이터 근거</strong>를 더하고,<br>
+                반복 업무는 AI가 처리하여<br>
+                사람은 <strong>판단과 창의</strong>에 집중하는 조직.
+                <span class="highlight-line">지금 시작하지 않을 이유가 없습니다.</span>
+            </div>
+        </div>
+        <span class="slide-number">15 / 15</span>
+    </section>
+
+
+    <!-- ==========================================
+       JAVASCRIPT: Slide Controller
+       Handles navigation, animations, progress
+       ========================================== -->
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.totalSlides = this.slides.length;
+                this.isAnimating = false;
+                this.progressBar = document.getElementById('progressBar');
+                this.navDotsContainer = document.getElementById('navDots');
+                this.keyboardHint = document.getElementById('keyboardHint');
+
+                this.init();
+            }
+
+            init() {
+                this.createNavDots();
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.hideHintAfterDelay();
+            }
+
+            /* Create navigation dots */
+            createNavDots() {
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.classList.add('nav-dot');
+                    if (i === 0) dot.classList.add('active');
+                    dot.setAttribute('aria-label', `Slide ${i + 1}`);
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    this.navDotsContainer.appendChild(dot);
+                });
+            }
+
+            /* Intersection Observer — triggers animations when slides enter viewport */
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const slideIndex = parseInt(entry.target.dataset.slide);
+                            this.currentSlide = slideIndex;
+                            this.updateProgress();
+                            this.updateNavDots();
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            /* Keyboard navigation */
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (this.keyboardHint) {
+                        this.keyboardHint.classList.add('hidden');
+                    }
+
+                    switch (e.key) {
+                        case 'ArrowDown':
+                        case 'ArrowRight':
+                        case ' ':
+                            e.preventDefault();
+                            this.nextSlide();
+                            break;
+                        case 'ArrowUp':
+                        case 'ArrowLeft':
+                            e.preventDefault();
+                            this.prevSlide();
+                            break;
+                        case 'Home':
+                            e.preventDefault();
+                            this.goToSlide(0);
+                            break;
+                        case 'End':
+                            e.preventDefault();
+                            this.goToSlide(this.totalSlides - 1);
+                            break;
+                    }
+                });
+            }
+
+            /* Touch/Swipe navigation */
+            setupTouchNav() {
+                let startY = 0;
+                let startX = 0;
+
+                document.addEventListener('touchstart', (e) => {
+                    startY = e.touches[0].clientY;
+                    startX = e.touches[0].clientX;
+                }, { passive: true });
+
+                document.addEventListener('touchend', (e) => {
+                    const deltaY = startY - e.changedTouches[0].clientY;
+                    const deltaX = startX - e.changedTouches[0].clientX;
+
+                    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 50) {
+                        if (deltaY > 0) this.nextSlide();
+                        else this.prevSlide();
+                    }
+                }, { passive: true });
+            }
+
+            /* Navigate to next slide */
+            nextSlide() {
+                if (this.currentSlide < this.totalSlides - 1) {
+                    this.goToSlide(this.currentSlide + 1);
+                }
+            }
+
+            /* Navigate to previous slide */
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.goToSlide(this.currentSlide - 1);
+                }
+            }
+
+            /* Jump to specific slide */
+            goToSlide(index) {
+                if (index >= 0 && index < this.totalSlides) {
+                    this.slides[index].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            /* Update progress bar width */
+            updateProgress() {
+                const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+                this.progressBar.style.width = `${progress}%`;
+            }
+
+            /* Update active dot */
+            updateNavDots() {
+                const dots = this.navDotsContainer.querySelectorAll('.nav-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentSlide);
+                });
+            }
+
+            /* Hide keyboard hint after 5 seconds */
+            hideHintAfterDelay() {
+                setTimeout(() => {
+                    if (this.keyboardHint) {
+                        this.keyboardHint.classList.add('hidden');
+                    }
+                }, 5000);
+            }
+        }
+
+        /* Initialize presentation when DOM is ready */
+        document.addEventListener('DOMContentLoaded', () => {
+            new SlidePresentation();
+        });
+    </script>
+</body>
+</html>

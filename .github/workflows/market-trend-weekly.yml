@@ -1,0 +1,73 @@
+name: Weekly Market Trend Crawl
+
+on:
+  schedule:
+    # 매주 월요일 00:00 KST = 일요일 15:00 UTC (주차 마감 직후)
+    - cron: '0 15 * * 0'
+  workflow_dispatch: # 수동 실행 가능
+
+permissions:
+  contents: write
+
+jobs:
+  crawl-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests openpyxl Pillow
+
+      - name: Crawl ranking (Uni, 20-24, Weekly)
+        run: |
+          python system/dashboard/ranking_crawler.py \
+            --category 001,002,003,004,103 \
+            --period WEEKLY --gender M --age AGE_BAND_20 \
+            --format json --no-images
+
+      - name: Crawl ranking (Womens, 20-24, Weekly)
+        run: |
+          python system/dashboard/ranking_crawler.py \
+            --category 001,002,003,004,103 \
+            --period WEEKLY --gender F --age AGE_BAND_20 \
+            --format json --no-images
+
+      - name: Crawl release (Upcoming)
+        run: |
+          python system/dashboard/release_crawler.py \
+            --tab upcoming --gender A --sort latest \
+            --format json --no-images
+
+      - name: Crawl release (NOW)
+        run: |
+          python system/dashboard/release_crawler.py \
+            --tab now --gender A --sort popular \
+            --format json --no-images
+
+      - name: Crawl trend (Keywords + Brands)
+        run: |
+          python system/dashboard/trend_crawler.py \
+            --format json
+
+      - name: Build dashboard data
+        run: python system/dashboard/market_trend_builder.py
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add workspace/musinsa-ranking/ workspace/musinsa-release/ workspace/musinsa-trend/ workspace/26SS/dashboard/data_market-trend.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: weekly market trend update $(date -u +%Y-%m-%d)"
+            git push
+          fi

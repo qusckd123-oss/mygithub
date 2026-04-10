@@ -1,0 +1,158 @@
+{
+  "_meta": {
+    "description": "와키윌리 PMF(Product-Market Fit) 프레임워크 — 시즌별 상품-시장 적합성 검증 체계",
+    "source": "docs/guide/plan_pmf-playbook.md",
+    "date": "2026-04-08"
+  },
+  "definition": {
+    "concept": "우리 상품이 고객의 진짜 니즈를 충족시켜서, 고객이 알아서 찾아오고 재구매하는 상태",
+    "formula": "PMF = 맞는 고객(Market) × 맞는 상품(Product) × 맞는 채널(Channel)",
+    "elements": {
+      "market": "누가 사는가 — 타겟 세그먼트",
+      "product": "왜 사는가 — 가치 제안",
+      "channel": "어디서 만나는가 — 유통·마케팅 접점"
+    },
+    "missing_element_symptoms": {
+      "no_market": "좋은 상품인데 살 사람이 없다 — '예쁜데 안 팔려'",
+      "no_product": "고객은 있는데 맞는 상품이 없다 — '와키윌리에서 이걸 왜?'",
+      "no_channel": "맞는 상품인데 고객이 발견 못한다 — '이런 게 있는 줄 몰랐어'"
+    }
+  },
+  "stages": {
+    "stage_1_market_customer_fit": {
+      "name": "시장-고객 정의",
+      "core_question": "정확히 누가, 어떤 상황에서, 무엇 때문에 우리 옷을 사는가?",
+      "pdca_phase": "Plan",
+      "key_principle": "상황(Scene) 기반 세분화 — 같은 사람이 상황에 따라 다른 상품을 원한다",
+      "steps": [
+        { "name": "거시 환경 스캔", "skill": "/market-scan", "output": "시장 규모·성장률·트렌드" },
+        { "name": "트렌드 레이더", "skill": "/trend-radar", "output": "키워드·실루엣·소재·컬러 트렌드" },
+        { "name": "경쟁 환경 분석", "skill": "/competitive", "output": "경쟁 포지셔닝 맵·공백 식별" },
+        { "name": "고객 리서치", "skill": "/research-users, /interview", "output": "페르소나·씬 매핑·JTBD" }
+      ],
+      "checklist": [
+        "거시 환경 분석 완료 (시장 규모·성장률·트렌드)",
+        "코어 타겟 세그먼트 3개 이내로 구체화",
+        "각 세그먼트의 씬(Scene) 최소 3개 정의",
+        "경쟁 포지셔닝 맵 완성 (공백 식별)",
+        "고객 인터뷰 5명 이상 실시 (또는 VOC 데이터 분석)"
+      ]
+    },
+    "stage_2_product_value_fit": {
+      "name": "제품-가치 설계",
+      "core_question": "고객이 돈을 내는 진짜 이유가 뭔가?",
+      "pdca_phase": "Design",
+      "key_principle": "고객은 '옷을 산다'가 아니라 특정 과업을 해결하기 위해 상품을 '고용'한다 (JTBD)",
+      "steps": [
+        { "name": "밸류 프로포지션 설계", "skill": "/value-prop", "output": "Pain/Gain 매칭 캔버스" },
+        { "name": "가격 전략 설계", "skill": "/pricing", "output": "BTA별 가격 매트릭스" },
+        { "name": "디자인 제너레이터", "skill": "/design-generator, /color-intelligence", "output": "컨셉 무드보드·컬러 팔레트" },
+        { "name": "패턴·원가 최적화", "skill": "/pattern-optimizer", "output": "패턴 최적화·원가율 검증" }
+      ],
+      "mvp_approach": {
+        "principle": "전부 만들지 말고 핵심만 테스트 — 가장 자신 있는 2-3가지로 시장 반응 검증",
+        "max_sty": 12,
+        "selection_criteria": [
+          { "name": "대표성", "question": "이 아이템이 라인업 전체를 설명하는가?" },
+          { "name": "검증력", "question": "이 아이템 반응으로 전체를 예측할 수 있는가?" },
+          { "name": "실행성", "question": "빠르게 만들 수 있는가?" },
+          { "name": "BTA 커버", "question": "B/T/A 중 최소 2개를 포함하는가?" }
+        ]
+      },
+      "checklist": [
+        "JTBD 분석 완료 (최소 3개 핵심 과업 정의)",
+        "밸류 프로포지션 캔버스 작성 (Pain/Gain 매칭)",
+        "경쟁 가격 벤치마크 완료",
+        "목표 가격대 BTA별 설정",
+        "MVP 라인업 확정 (12 STY 이내)",
+        "디자인 컨셉 무드보드 1차 완성"
+      ]
+    },
+    "stage_3_channel_growth_fit": {
+      "name": "채널-성장 검증",
+      "core_question": "이 상품이 고객에게 반복적으로 도달하고, 다시 사게 만들 수 있는가?",
+      "pdca_phase": "Do → Check",
+      "key_principle": "같은 상품이라도 채널에 따라 PMF 달성 여부가 다를 수 있다",
+      "steps": [
+        { "name": "수요 예측", "skill": "/demand-optimizer", "output": "수요 예측·QR 타이밍" },
+        { "name": "마케팅 전략", "skill": "/marketing", "output": "B.A.M.P 검증·IMC 전략" },
+        { "name": "A/B 테스트", "skill": "/ab-test, /cohorts", "output": "메시지 검증·재구매 분석" },
+        { "name": "그로스 전략", "skill": "/growth", "output": "성장 로드맵" }
+      ],
+      "growth_stages": {
+        "pre_pmf": "상품/메시지 수정에 집중 (마케팅 비용 쓰지 말 것)",
+        "early_pmf": "채널 확대 + 리오더 확대",
+        "growth_pmf": "IMC 풀 캠페인 + QR 극대화 + 글로벌 테스트"
+      },
+      "checklist": [
+        "채널별 PMF 지표 대시보드 설계",
+        "Sean Ellis Test 또는 고객 설문 실시 (최소 50명)",
+        "A/B 테스트 1건 이상 실행 및 결과 분석",
+        "코호트별 재구매율 추적 시작",
+        "PMF 달성/미달 판정 기준 합의"
+      ]
+    }
+  },
+  "bta_pmf_integration": {
+    "description": "BTA 전략과 PMF는 별개가 아니다 — BTA 각 레벨에서 PMF의 의미가 다르다",
+    "basic": {
+      "pmf_meaning": "다시 산다 — 신뢰 기반 재구매",
+      "core_metrics": ["재구매율 > 30%", "회전율"],
+      "failure_signal": "재고 누적, 할인율 증가",
+      "cost_target": "원가율 27-30%"
+    },
+    "trend": {
+      "pmf_meaning": "갖고 싶다 — 욕구 기반 구매",
+      "core_metrics": ["정상 판매율 > 70%", "SNS 반응"],
+      "failure_signal": "초두 미소진, 검색 저조",
+      "cost_target": "원가율 30-33%"
+    },
+    "accent": {
+      "pmf_meaning": "얘기하고 싶다 — 화제성 기반 확산",
+      "core_metrics": ["UGC 수", "미디어 노출", "차시즌 전이율"],
+      "failure_signal": "SNS 무반응, 전이 실패",
+      "cost_target": "원가율 33-38%"
+    }
+  },
+  "grading": {
+    "strong_pmf": {
+      "label": "Strong PMF",
+      "conditions": ["정상판매율 70%+", "재구매 25%+", "QR 2회+"],
+      "action": "풀 캠페인 + 라인 확장"
+    },
+    "emerging_pmf": {
+      "label": "Emerging PMF",
+      "conditions": ["정상판매율 50-70%", "재구매 15-25%"],
+      "action": "메시지/채널 튜닝 후 재검증"
+    },
+    "no_pmf": {
+      "label": "No PMF",
+      "conditions": ["정상판매율 < 50%", "재구매 < 15%"],
+      "action": "상품 or 타겟 재설계 (PDCA Act → Plan)"
+    }
+  },
+  "metrics": {
+    "fashion_pmf_indicators": [
+      { "name": "정상 판매율", "no_pmf": "< 50%", "pmf": "> 70%", "method": "시즌 종료 시 정가 판매 비율" },
+      { "name": "재구매율", "no_pmf": "< 10%", "pmf": "> 25%", "method": "6개월 내 재구매 고객 비율" },
+      { "name": "QR 리오더", "no_pmf": "0회", "pmf": "2회+", "method": "시즌 내 리오더 횟수" },
+      { "name": "SNS 자발 공유", "no_pmf": "광고만", "pmf": "고객 자발", "method": "브랜드 태그 UGC 비율" },
+      { "name": "NPS", "no_pmf": "< 30", "pmf": "> 50", "method": "순추천지수" },
+      { "name": "리뷰 점수", "no_pmf": "< 4.0", "pmf": "> 4.5", "method": "무신사/자사몰 평균" }
+    ],
+    "sean_ellis_test": {
+      "question": "이 상품이 더 이상 없다면 어떤 기분이 들겠어요?",
+      "pmf_threshold": "매우 실망 40%+ 이면 PMF 달성",
+      "good_signal": "매우 실망 + 약간 실망 합산 60%+ 양호",
+      "bad_signal": "상관 없음 50%+ 이면 PMF 미달"
+    }
+  },
+  "pdca_workflow": {
+    "plan": "시장-고객 정의 (PMF 기회 탐색) → /trend-radar → /competitive → /research-users",
+    "design": "제품-가치 설계 (PMF 가설 수립) → /value-prop → /pricing → /design-generator → /pattern-optimizer",
+    "do": "시장 출시 (PMF 테스트) → /marketing → /visual-factory → techpack·생산",
+    "check": "데이터 검증 (PMF 판정) → /demand-optimizer → /ab-test → /cohorts → /metrics",
+    "act": "개선 or 확대 — PMF 달성 시 /growth, 미달 시 Plan 재설계 (Match Rate < 90% 자동 루프)"
+  },
+  "core_philosophy": "예쁜 옷을 만드는 것이 아니라, 고객이 찾는 옷을 예쁘게 만드는 것 — PMF는 한 번이 아니라 매 시즌 반복"
+}

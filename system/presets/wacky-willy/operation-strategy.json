@@ -1,0 +1,187 @@
+{
+  "_meta": {
+    "description": "와키윌리 사업부 조직화 및 운영 전략 — 조직 구조, 카테고리 유닛, 회의체, 연간 캘린더",
+    "source": "docs/reference/wacky willy operation plan/wacky-willy-operation-strategy.md",
+    "original": "와키윌리 사업부 조직화 및 운영 전략(250112).pdf (74페이지)",
+    "author": "박승훈 사업부장",
+    "date": "2025-01-12",
+    "updated": "2026-03-25"
+  },
+  "organization": {
+    "total_headcount": 33,
+    "departments": {
+      "design_studio": {
+        "name": "디자인실",
+        "headcount": 14,
+        "leader": "전이준 실장",
+        "teams": {
+          "uni_design": {
+            "headcount": 8,
+            "scope": ["유니/우븐(아우터/셔츠/팬츠)", "다이마루(스웻/반팔티)", "그래픽", "컬러", "소재", "스웨터"]
+          },
+          "women_acc_design": {
+            "headcount": 5,
+            "leader": "우혜원 팀장",
+            "scope": ["우먼(우븐/다이마루/니트)", "ACC 디자인"]
+          }
+        }
+      },
+      "product_dept": {
+        "name": "상품부",
+        "headcount": 13,
+        "leader": "나영훈 부서장",
+        "teams": {
+          "planning": {
+            "headcount": 4,
+            "leader": "김민혁 팀장",
+            "scope": ["어패럴기획/유니", "어패럴기획/우먼스"]
+          },
+          "sourcing": {
+            "headcount": 4,
+            "leader": "미정 (공석)",
+            "scope": ["우븐(아우터)", "우븐(이너)/스웨터", "특종(데님/비건)"]
+          },
+          "acc_shoes_planning": {
+            "headcount": 3,
+            "leader": "김정환 팀장",
+            "scope": ["슈즈디자인/소싱", "ACC 기획/소싱"]
+          }
+        }
+      },
+      "marketing_office": {
+        "name": "마케팅실",
+        "headcount": 5,
+        "leader": "박성찬 실장",
+        "scope": ["콘텐츠 마케팅", "마케팅기획", "콘텐츠멀디", "마케팅 커뮤니케이션"]
+      }
+    }
+  },
+  "org_health_assessment": {
+    "date": "2026-01-08",
+    "sample": "전 구성원 27명 인터뷰",
+    "status": "CRITICAL",
+    "crisis_indicators": {
+      "direction_crisis": { "rate": 0.93, "detail": "방향성 혼란 — '와키윌리가 뭘 하고 싶은지 모르겠다'" },
+      "communication_gap": { "rate": 0.81, "detail": "소통 체계 붕괴 경험" },
+      "leadership_vacuum": { "rate": 0.66, "detail": "팀장 공석 4팀/6팀" }
+    },
+    "core_problems": [
+      "방향성의 부재 (93% 언급)",
+      "중간 관리층 붕괴와 소통 단절 (팀장 공석률 66%)",
+      "급박한 업무 환경 (1인당 80개 스타일, 원가율 27%→30%)"
+    ],
+    "recovery_plan": {
+      "focus_areas": ["CLARITY (명확한 방향성)", "LEADERSHIP (굳건한 허리)", "PROCESS (효율적 시스템)"],
+      "phase_1_emergency": {
+        "duration": "1개월",
+        "actions": ["브랜드 방향성 정립", "팀장 충원", "1인당 스타일 수 30% 감축(80→42개)"]
+      },
+      "phase_2_system": {
+        "duration": "3개월",
+        "kpis": ["전 직원 브랜드 방향 이해도 80%+", "핵심 팀장 안착/공석률 0%", "디자인 리젝률 50% 감소"]
+      }
+    }
+  },
+  "lightweight_org_framework": {
+    "three_axes": {
+      "structural": "의사결정 단계 줄이기 — 마이크로 유닛 모델 (4일 vs 전통 45일)",
+      "execution": "인프라·프로세스·의사결정·AI자동화 4가지 경량화",
+      "strategic": "핵심역량 유지 + 외부자원 적극 활용 (고정비→변동비화)"
+    },
+    "three_authorities": ["결정권 (현장 즉시 종결)", "인사권 (직접 채용/팀 구성)", "예산권 (자체 자원 배분)"],
+    "decision_types": {
+      "type1_irreversible": "신중하고 철저한 검토",
+      "type2_reversible": "최대한 빠른 실행 및 수정 — 대부분의 업무는 Type 2"
+    },
+    "resource_allocation": {
+      "core_operations": 0.60,
+      "pivot_resource": 0.25,
+      "crisis_reserve": 0.15
+    }
+  },
+  "category_units": {
+    "description": "카테고리별 기능조직이 연결된 글로벌 사업운영시스템",
+    "value_chain": "GTM(카테고리전략~생산) → IMC(마케팅~판매관리) → Retail(온오프판매+재고리오더)",
+    "units": [
+      {
+        "name": "유니 아우터/우븐/팬츠",
+        "planning_leader": "한병현",
+        "design": ["김현수", "정대건"],
+        "sourcing": "박희현",
+        "marketing": "박성민"
+      },
+      {
+        "name": "유니 이너/바텀/다이마루",
+        "planning_leader": "김민혁",
+        "design": ["김희영", "배용준", "김지훈"],
+        "sourcing": "김윤종(+스팟)",
+        "marketing": "권순범"
+      },
+      {
+        "name": "우먼스",
+        "planning_leader": ["김연희", "양윤선"],
+        "design": ["이수연", "황다을", "임강영"],
+        "sourcing": "진승현(+소싱팀장)",
+        "marketing": "안민혁"
+      },
+      {
+        "name": "악세/슈즈",
+        "planning_leader": "김정환",
+        "design": ["천서영", "문상원", "서예빈"],
+        "sourcing": "정수지",
+        "marketing": "박다솜"
+      }
+    ],
+    "shared_functions": {
+      "color": "고보민",
+      "material": "김나연",
+      "sales_retail": ["최재영", "오지훈"],
+      "distribution_cs": ["정재훈", "서윤희"],
+      "studio": "유성열"
+    },
+    "operators": ["김민혁", "김정환", "박희현", "김윤종", "나영훈", "전이준", "우혜원", "박성찬"]
+  },
+  "weekly_meeting_framework": {
+    "principle": "수요일 오전까지 모든 회의·의사결정 완료 → 목금 실행 집중",
+    "schedule": {
+      "monday": {
+        "am": "개인 실행결과 분석/리뷰",
+        "pm": "팀별 미팅 + 사업부 리더 회의 → 카테고리 주요 아젠다 도출"
+      },
+      "tuesday": {
+        "am": "카테고리별 전략/실행계획 준비",
+        "pm": "카테고리 미팅 + 협업(영업/VM/온라인/글로벌)"
+      },
+      "wednesday": {
+        "am": "GTM, IMC 주요 의사결정",
+        "pm": "실행에 집중"
+      },
+      "thursday": "실행 집중",
+      "friday": "실행 집중"
+    },
+    "agenda_items": [
+      "주간 사업부 매출 현황",
+      "카테고리 판매현황 (베스트/리오더/재고)",
+      "마켓 동향 (시장조사/소비자트렌드)",
+      "주간 입고 예정상품",
+      "생산 진행현황",
+      "GTM 일정 (캘린더/품평/Go Drop)",
+      "IMC 운영 현황 (캠페인/퍼포먼스/VM)",
+      "매장 오픈/폐점 계획",
+      "상품 피드백 VOC",
+      "품질이슈/납기이슈",
+      "SOP 진행현황"
+    ]
+  },
+  "annual_calendar": {
+    "26SS": "입고시작(1월) → 마케팅전략/화보촬영(1~2월) → IMC 운영(3~8월) → 리뷰(8월)",
+    "26FW": "CAD 품평(1월) → 샘플품평(3월) → 발주마감(3월) → 생산(4~8월) → 입고시작(8월) → 화보촬영(9월) → IMC 운영(10월~)",
+    "27SS": "킥오프(2월) → 시장조사(3월) → 소재/컬러/아트웍(4월) → 디자인(5월) → CAD품평(6월) → 샘플품평(7월) → 발주마감(9월) → 화보촬영(11월) → IMC운영(12월~)",
+    "spot_production": "격월 1~6차",
+    "company_events": "사업계획(12월) → 신년회(1월) → Q1피드백(3월) → 워크샵(5월) → Q2피드백(7월) → Q3피드백(9월) → Q4피드백(12월) → 송년회(12월)"
+  },
+  "brand_direction_v1": {
+    "definition": "과거의 멋진 것을 요즘스럽게 리믹스하는, 기민하고 위트있는 스트릿 캐주얼 브랜드",
+    "keywords": ["안 들키게 훔치는 것", "심플한데 이쁜 것"]
+  }
+}

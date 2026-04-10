@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Committee Workshop — FPOF V2.2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================
+           THEME: Wacky Willy Workshop
+           Signature Yellow + Black + Sky Blue
+           Light mode, bold, energetic
+           ========================================== */
+        :root {
+            --yellow: #FEF200;
+            --black: #1a1a1a;
+            --sky: #68A8DB;
+            --white: #FFFFFF;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-200: #E5E5E5;
+            --gray-400: #A3A3A3;
+            --gray-600: #525252;
+            --gray-800: #262626;
+
+            --font-display: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --title-size: clamp(1.8rem, 5vw, 3.5rem);
+            --h2-size: clamp(1.3rem, 3.5vw, 2.2rem);
+            --h3-size: clamp(1rem, 2.5vw, 1.5rem);
+            --body-size: clamp(0.75rem, 1.4vw, 1.05rem);
+            --small-size: clamp(0.65rem, 1vw, 0.85rem);
+            --tag-size: clamp(0.6rem, 0.9vw, 0.75rem);
+
+            --slide-padding: clamp(1.5rem, 4vw, 4rem);
+            --content-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-display);
+            background: var(--white);
+            color: var(--black);
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ==========================================
+           SLIDE BASE
+           ========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: var(--slide-padding);
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+        /* ==========================================
+           SLIDE TYPES
+           ========================================== */
+
+        /* Title Slide — Black bg, yellow accent */
+        .slide-title {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .slide-title .badge {
+            display: inline-block;
+            background: var(--yellow);
+            color: var(--black);
+            padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.6rem, 1.2vw, 1rem);
+            border-radius: 4px;
+            font-size: var(--small-size);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: clamp(0.8rem, 2vw, 1.5rem);
+        }
+
+        .slide-title h1 {
+            font-size: clamp(2rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: clamp(0.5rem, 1.5vw, 1rem);
+        }
+
+        .slide-title h1 .accent {
+            color: var(--yellow);
+        }
+
+        .slide-title .subtitle {
+            font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        /* Section Slide — Yellow bar left */
+        .slide-section {
+            background: var(--gray-50);
+            padding-left: clamp(2rem, 6vw, 6rem);
+            border-left: clamp(4px, 0.8vw, 8px) solid var(--yellow);
+        }
+
+        .slide-section .section-number {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 900;
+            color: var(--gray-200);
+            line-height: 1;
+            margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);
+        }
+
+        .slide-section h2 {
+            font-size: var(--title-size);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: clamp(0.3rem, 0.8vw, 0.5rem);
+        }
+
+        .slide-section .section-desc {
+            font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+            color: var(--gray-600);
+            max-width: 600px;
+        }
+
+        .slide-section .section-meta {
+            display: flex;
+            gap: clamp(0.5rem, 1vw, 1rem);
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        .slide-section .meta-tag {
+            font-size: var(--tag-size);
+            font-weight: 600;
+            padding: clamp(0.2rem, 0.4vw, 0.3rem) clamp(0.4rem, 0.8vw, 0.6rem);
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .meta-tag.time { background: var(--yellow); color: var(--black); }
+        .meta-tag.audience { background: var(--sky); color: var(--white); }
+
+        /* Content Slide — white bg */
+        .slide-content-type {
+            background: var(--white);
+        }
+
+        .slide-content-type h2 {
+            font-size: var(--h2-size);
+            font-weight: 800;
+            margin-bottom: clamp(0.6rem, 1.5vw, 1.2rem);
+            display: flex;
+            align-items: center;
+            gap: clamp(0.4rem, 0.8vw, 0.6rem);
+        }
+
+        .slide-content-type h2 .icon {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(0.6rem, 1.5vw, 1.2rem);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(0.5rem, 1.2vw, 1rem);
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(0.5rem, 1vw, 0.8rem);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        }
+
+        /* Card */
+        .card {
+            background: var(--gray-50);
+            border-radius: clamp(6px, 1vw, 10px);
+            padding: clamp(0.6rem, 1.5vw, 1.2rem);
+            border: 1px solid var(--gray-200);
+        }
+
+        .card h3 {
+            font-size: var(--h3-size);
+            font-weight: 700;
+            margin-bottom: clamp(0.2rem, 0.5vw, 0.4rem);
+        }
+
+        .card p, .card li {
+            font-size: var(--body-size);
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card ul li {
+            padding-left: 1.2em;
+            position: relative;
+        }
+
+        .card ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--sky);
+            font-weight: 600;
+        }
+
+        .card .card-icon {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            margin-bottom: clamp(0.2rem, 0.5vw, 0.4rem);
+        }
+
+        .card-highlight {
+            border-left: 3px solid var(--yellow);
+            background: #FFFEF0;
+        }
+
+        .card-sky {
+            border-left: 3px solid var(--sky);
+            background: #F0F7FC;
+        }
+
+        /* Code block */
+        .code-block {
+            background: var(--gray-800);
+            color: #E5E5E5;
+            font-family: var(--font-mono);
+            font-size: var(--small-size);
+            padding: clamp(0.5rem, 1vw, 0.8rem) clamp(0.7rem, 1.2vw, 1rem);
+            border-radius: 6px;
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        .code-block .cmd { color: var(--yellow); }
+        .code-block .comment { color: #6B7280; }
+        .code-block .output { color: #86EFAC; }
+
+        /* Table */
+        .mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--small-size);
+        }
+
+        .mini-table th {
+            text-align: left;
+            font-weight: 700;
+            padding: clamp(0.25rem, 0.5vw, 0.4rem) clamp(0.4rem, 0.8vw, 0.6rem);
+            background: var(--gray-100);
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .mini-table td {
+            padding: clamp(0.2rem, 0.4vw, 0.35rem) clamp(0.4rem, 0.8vw, 0.6rem);
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        /* Bullet list */
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.3rem, 0.8vw, 0.6rem);
+        }
+
+        .bullet-list li {
+            font-size: var(--body-size);
+            line-height: 1.5;
+            padding-left: 1.5em;
+            position: relative;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.55em;
+            width: 6px;
+            height: 6px;
+            background: var(--yellow);
+            border-radius: 1px;
+        }
+
+        .bullet-list li strong {
+            color: var(--black);
+        }
+
+        /* Divider */
+        .divider {
+            width: 40px;
+            height: 3px;
+            background: var(--yellow);
+            margin: clamp(0.5rem, 1vw, 0.8rem) 0;
+        }
+
+        /* Flow diagram */
+        .flow {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.3rem, 0.6vw, 0.5rem);
+            flex-wrap: wrap;
+            font-size: var(--small-size);
+            font-weight: 600;
+        }
+
+        .flow-step {
+            background: var(--gray-100);
+            padding: clamp(0.3rem, 0.5vw, 0.4rem) clamp(0.5rem, 1vw, 0.8rem);
+            border-radius: 4px;
+        }
+
+        .flow-step.active {
+            background: var(--yellow);
+            color: var(--black);
+        }
+
+        .flow-arrow { color: var(--gray-400); }
+
+        /* Closing slide */
+        .slide-closing {
+            background: var(--black);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .slide-closing h2 {
+            font-size: var(--title-size);
+            font-weight: 900;
+            margin-bottom: clamp(0.5rem, 1vw, 1rem);
+        }
+
+        .slide-closing .accent { color: var(--yellow); }
+
+        .slide-closing p {
+            font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+            color: var(--gray-400);
+        }
+
+        /* ==========================================
+           NAVIGATION
+           ========================================== */
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.5rem, 1.5vw, 1.5rem);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gray-300, #D4D4D4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .nav-dot.active {
+            background: var(--yellow);
+            transform: scale(1.4);
+        }
+
+        .nav-dot.section-dot {
+            width: 8px;
+            height: 8px;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--yellow);
+            z-index: 200;
+            transition: width 0.3s ease;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: clamp(0.5rem, 1.5vw, 1.5rem);
+            right: clamp(0.5rem, 1.5vw, 1.5rem);
+            font-size: var(--small-size);
+            font-family: var(--font-mono);
+            color: var(--gray-400);
+            z-index: 100;
+        }
+
+        .slide-title .slide-counter,
+        .slide-closing .slide-counter { color: var(--gray-600); }
+
+        /* ==========================================
+           ANIMATIONS
+           ========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .reveal:nth-child(2) { transition-delay: 0.1s; }
+        .reveal:nth-child(3) { transition-delay: 0.15s; }
+        .reveal:nth-child(4) { transition-delay: 0.2s; }
+        .reveal:nth-child(5) { transition-delay: 0.25s; }
+        .reveal:nth-child(6) { transition-delay: 0.3s; }
+
+        /* ==========================================
+           RESPONSIVE
+           ========================================== */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(1rem, 3vw, 2.5rem);
+                --content-gap: clamp(0.4rem, 1vw, 0.8rem);
+                --title-size: clamp(1.5rem, 4.5vw, 2.5rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 2.5vw, 1.5rem);
+                --title-size: clamp(1.2rem, 4vw, 2rem);
+                --body-size: clamp(0.65rem, 1.2vw, 0.9rem);
+            }
+            .nav-dots { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.5rem);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots"></nav>
+<div class="slide-counter" id="slideCounter"></div>
+
+<!-- ========== SLIDE 1: TITLE ========== -->
+<section class="slide slide-title">
+    <div class="slide-content">
+        <div class="badge reveal">AI Committee Workshop 2026</div>
+        <h1 class="reveal">FPOF <span class="accent">V2.2</span><br>시스템 업데이트</h1>
+        <p class="subtitle reveal">비케이브 AI Committee · 15개 세션 · 31개 플러그인 · 와키윌리 브랜드 컨텍스트</p>
+    </div>
+</section>
+
+<!-- ========== SLIDE 2: AGENDA OVERVIEW ========== -->
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">📋</span> 워크숍 아젠다</h2>
+        <div class="grid-2 reveal">
+            <div>
+                <h3 style="font-size:var(--h3-size);font-weight:700;margin-bottom:0.5rem;color:var(--black);">DAY 1 — 시스템 & 도구</h3>
+                <table class="mini-table">
+                    <tr><th>#</th><th>세션</th><th>시간</th></tr>
+                    <tr><td>01</td><td>전사 방향성 공유</td><td>30분</td></tr>
+                    <tr><td>02</td><td>Apple Neural Engine</td><td>40분</td></tr>
+                    <tr><td>03</td><td>에이전트 팀 병렬 실행</td><td>30분</td></tr>
+                    <tr><td>04</td><td>핀터레스트 크롤링</td><td>20분</td></tr>
+                    <tr><td>05</td><td>나만의 AI 스킬 만들기</td><td>40분</td></tr>
+                    <tr><td>06</td><td>회의록 & 보고서 요약</td><td>30분</td></tr>
+                    <tr><td>07</td><td>프레젠테이션 만들기</td><td>35분</td></tr>
+                </table>
+            </div>
+            <div>
+                <h3 style="font-size:var(--h3-size);font-weight:700;margin-bottom:0.5rem;color:var(--black);">DAY 2 — 분석 & 전략</h3>
+                <table class="mini-table">
+                    <tr><th>#</th><th>세션</th><th>시간</th></tr>
+                    <tr><td>08</td><td>문서 생성 3종 세트</td><td>30분</td></tr>
+                    <tr><td>09</td><td>교정 & 브랜드 보이스</td><td>25분</td></tr>
+                    <tr><td>10</td><td>경쟁 분석 & 전략</td><td>35분</td></tr>
+                    <tr><td>11</td><td>고객 리서치 종합</td><td>30분</td></tr>
+                    <tr><td>12</td><td>데이터 분석 & 대시보드</td><td>35분</td></tr>
+                    <tr><td>13</td><td>OKR & 스프린트 관리</td><td>30분</td></tr>
+                    <tr><td>14</td><td>디스커버리 & 아이디에이션</td><td>30분</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 01 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">01</div>
+        <h2 class="reveal">전사 방향성 공유</h2>
+        <p class="section-desc reveal">리워크 프로세스 혁신 — 5대 전환, AI 조직 변혁, 브랜드 감도 강화</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">30분</span>
+            <span class="meta-tag audience">전원 필수</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🔄</span> 5대 전환</h2>
+        <div class="divider reveal"></div>
+        <table class="mini-table reveal" style="margin-bottom:var(--content-gap)">
+            <tr><th>FROM</th><th>TO</th><th>핵심</th></tr>
+            <tr><td>기능 조직</td><td><strong>브랜드 중심 조직</strong></td><td>PMD 통합 관리</td></tr>
+            <tr><td>AI = 효율 도구</td><td><strong>AI = 조직 재설계</strong></td><td>생존의 문제</td></tr>
+            <tr><td>안전한 상품</td><td><strong>뾰족한 브랜드</strong></td><td>SPA 차별화</td></tr>
+            <tr><td>면세 의존</td><td><strong>해외 직진출 + 손익 관리</strong></td><td>B2C 전환</td></tr>
+            <tr><td>분절적 기획</td><td><strong>히트상품 원팀 프로세스</strong></td><td>리소스 집중</td></tr>
+        </table>
+        <div class="card card-highlight reveal">
+            <p><strong>"AI 시대는 일 많이 하는 사람이 아니라, 판을 설계하고 선택하고 책임지는 사람의 시대"</strong></p>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 02 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">02</div>
+        <h2 class="reveal">Apple Neural Engine</h2>
+        <p class="section-desc reveal">온디바이스 ML — OCR · 감정분석 · 이미지분류 · 사운드분류 · 완전 오프라인</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">40분</span>
+            <span class="meta-tag audience">Apple Silicon</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🧠</span> ANE CLI 9가지 명령어</h2>
+        <div class="grid-3 reveal">
+            <div class="card"><div class="card-icon">📝</div><h3>OCR</h3><p>이미지→텍스트 추출 (한/영/일)</p></div>
+            <div class="card"><div class="card-icon">😊</div><h3>감정분석</h3><p>텍스트 긍정/부정 판단</p></div>
+            <div class="card"><div class="card-icon">🏷️</div><h3>이미지 분류</h3><p>사진이 무엇인지 식별</p></div>
+            <div class="card"><div class="card-icon">🎨</div><h3>미적 평가</h3><p>이미지 품질 점수 (0~1)</p></div>
+            <div class="card"><div class="card-icon">🌐</div><h3>언어 감지</h3><p>텍스트 언어 자동 식별</p></div>
+            <div class="card"><div class="card-icon">👤</div><h3>NER</h3><p>인명/지명/조직명 추출</p></div>
+        </table>
+        </div>
+        <div class="code-block reveal" style="margin-top:var(--content-gap)">
+            <span class="cmd">./ane_tool</span> sentiment "이번 시즌 와키윌리 컬렉션 진짜 예쁘다"<br>
+            <span class="output">→ {"score": 0.85, "label": "positive"}</span>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 03 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">03</div>
+        <h2 class="reveal">에이전트 팀 병렬 실행</h2>
+        <p class="section-desc reveal">tmux 멀티 세션으로 여러 AI 에이전트를 동시 실행 · 5개 프리셋 제공</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">30분</span>
+            <span class="meta-tag audience">CLI 사용자</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🖥️</span> 5개 프리셋 팀</h2>
+        <div class="grid-2 reveal">
+            <div>
+                <table class="mini-table">
+                    <tr><th>프리셋</th><th>구성</th></tr>
+                    <tr><td><strong>season-plan</strong></td><td>리서처 · 전략가 · MD · 플래너</td></tr>
+                    <tr><td><strong>design-sprint</strong></td><td>무드보드 · 디자인 · 비주얼 · 원가</td></tr>
+                    <tr><td><strong>marketing-blitz</strong></td><td>IMC · 카피 · 비주얼 · 소셜</td></tr>
+                    <tr><td><strong>data-review</strong></td><td>매출 · 인사이트 · 코호트</td></tr>
+                    <tr><td><strong>quality-gate</strong></td><td>QG · 갭분석 · 리포트</td></tr>
+                </table>
+            </div>
+            <div>
+                <div class="code-block">
+                    <span class="comment"># 시즌 전략 팀 실행</span><br>
+                    <span class="cmd">./system/scripts/team-tmux.sh</span> season-plan<br><br>
+                    <span class="comment"># 커스텀 팀 구성</span><br>
+                    <span class="cmd">./system/scripts/team-tmux.sh</span> custom \<br>
+                    &nbsp;&nbsp;"리서처:트렌드 분석" \<br>
+                    &nbsp;&nbsp;"전략가:브랜드 전략"<br><br>
+                    <span class="comment"># 상태 확인 / 종료</span><br>
+                    <span class="cmd">./system/scripts/team-tmux.sh</span> status<br>
+                    <span class="cmd">./system/scripts/team-tmux.sh</span> kill
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 04 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">04</div>
+        <h2 class="reveal">핀터레스트 크롤링</h2>
+        <p class="section-desc reveal">레퍼런스 이미지 자동 수집 — 5단어 규칙 · 키워드별 자동 폴더 분류</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">20분</span>
+            <span class="meta-tag audience">크리에이티브</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">📌</span> 5단어 규칙 & 자동 폴더 분류</h2>
+        <div class="grid-2 reveal">
+            <div class="card card-highlight">
+                <h3>키워드 설계 — 5단어 이내</h3>
+                <table class="mini-table">
+                    <tr><th>목적</th><th>추천 키워드</th></tr>
+                    <tr><td>트렌드</td><td>dopamine fashion 2026 summer</td></tr>
+                    <tr><td>스타일링</td><td>streetwear layering outfit</td></tr>
+                    <tr><td>소재</td><td>mesh texture fabric detail</td></tr>
+                    <tr><td>컬러</td><td>pastel color palette fashion</td></tr>
+                    <tr><td>VM</td><td>retail display streetwear</td></tr>
+                </table>
+                <p style="margin-top:0.4rem;font-size:var(--small-size);color:var(--gray-400);">영문 키워드가 결과 풍부. 한글+영문 조합도 가능.</p>
+            </div>
+            <div>
+                <div class="card" style="margin-bottom:var(--content-gap)">
+                    <h3>자동 폴더 분류</h3>
+                    <div class="code-block">
+                        <span class="output">workspace/pinterest/</span><br>
+                        ├── <span class="cmd">dopamine-dressing/</span><br>
+                        │&nbsp;&nbsp; ├── pin_001.jpg<br>
+                        │&nbsp;&nbsp; └── pin_002.jpg<br>
+                        ├── <span class="cmd">streetwear-layering/</span><br>
+                        └── <span class="cmd">mesh-texture-detail/</span>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <span class="comment"># 기본 수집</span><br>
+                    <span class="cmd">/pinterest</span> dopamine dressing<br><br>
+                    <span class="comment"># 수량 지정</span><br>
+                    <span class="cmd">/pinterest</span> 텐션업코디 50
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 05 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">05</div>
+        <h2 class="reveal">나만의 AI 스킬 만들기</h2>
+        <p class="section-desc reveal">SKILL.md 구조 이해 · 초안 작성 · 테스트 · 반복 개선 · 배포</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">40분</span>
+            <span class="meta-tag audience">전원</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🔧</span> 스킬 = 업무 매뉴얼</h2>
+        <div class="grid-2 reveal">
+            <div class="card card-highlight">
+                <h3>스킬 없을 때</h3>
+                <p>"트렌드 브리프 작성해줘"</p>
+                <p style="margin-top:0.3rem;color:var(--gray-400);">→ 일반적인 지식으로 대충 작성. 브랜드 맥락 없음.</p>
+            </div>
+            <div class="card card-sky">
+                <h3>스킬 있을 때</h3>
+                <p>"트렌드 브리프 작성해줘"</p>
+                <p style="margin-top:0.3rem;color:var(--gray-400);">→ brand.config.json 참조 + BTA 준수 + 5대 경영목표 연계 + 표준 포맷</p>
+            </div>
+        </div>
+        <div class="reveal" style="margin-top:var(--content-gap);">
+            <h3 style="font-size:var(--h3-size);font-weight:700;margin-bottom:0.4rem;">만들기 5단계</h3>
+            <div class="flow">
+                <span class="flow-step active">1. 의도 정리</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">2. 리서치</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">3. SKILL.md 작성</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">4. 테스트</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">5. 반복 개선</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 06 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">06</div>
+        <h2 class="reveal">회의록 & 보고서 요약</h2>
+        <p class="section-desc reveal">/meeting → 구조화된 회의록 → executive-summary → 경영진 보고서</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">30분</span>
+            <span class="meta-tag audience">전원 필수</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">📝</span> 2개 스킬 파이프라인</h2>
+        <div class="flow reveal" style="margin-bottom:var(--content-gap);">
+            <span class="flow-step">회의 트랜스크립트</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step active">/meeting (5분)</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">구조화 회의록</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step active">executive-summary (2분)</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">경영진 보고서</span>
+        </div>
+        <div class="grid-2 reveal">
+            <div class="card">
+                <h3>/meeting</h3>
+                <ul>
+                    <li>참석자 · 역할 자동 식별</li>
+                    <li>결정 사항 분리</li>
+                    <li>액션 아이템 (담당+기한)</li>
+                    <li>시즌 마일스톤 자동 연결</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>executive-summary</h3>
+                <ul>
+                    <li>Summary 3줄 이내</li>
+                    <li>Key Metrics 표</li>
+                    <li>Insights 원인 분석</li>
+                    <li>누락 정보 자동 감지</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 07 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">07</div>
+        <h2 class="reveal">프레젠테이션 만들기</h2>
+        <p class="section-desc reveal">/deck (PPTX) · PPTX 스킬 (범용) · Frontend Slides (HTML) — 3가지 방식</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">35분</span>
+            <span class="meta-tag audience">전원 필수</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🎬</span> 3가지 방식 비교</h2>
+        <div class="grid-3 reveal">
+            <div class="card card-highlight">
+                <h3>/deck</h3>
+                <p><strong>.pptx</strong> 출력</p>
+                <ul>
+                    <li>FPOF 브랜드 자동 적용</li>
+                    <li>PDCA 단계별 8종 덱</li>
+                    <li>바이어·경영진 발표용</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>PPTX 스킬</h3>
+                <p><strong>.pptx</strong> 출력</p>
+                <ul>
+                    <li>범용 파워포인트</li>
+                    <li>컬러 팔레트 6종</li>
+                    <li>기존 PPT 편집 가능</li>
+                </ul>
+            </div>
+            <div class="card card-sky">
+                <h3>Frontend Slides</h3>
+                <p><strong>.html</strong> 출력</p>
+                <ul>
+                    <li>애니메이션 · 반응형</li>
+                    <li>12종 스타일 프리셋</li>
+                    <li>PPT → HTML 변환</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 08 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">08</div>
+        <h2 class="reveal">문서 생성 3종 세트</h2>
+        <p class="section-desc reveal">/doc (워드) · /sheet (엑셀) · /pdf (PDF) — PDCA 단계별 자동 생성</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">30분</span>
+            <span class="meta-tag audience">전원 필수</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">📄</span> 문서 4총사</h2>
+        <div class="grid-4 reveal">
+            <div class="card"><h3>/doc</h3><p>캠페인기획서 · 보도자료 · 브리프 · 시즌리뷰</p><p style="color:var(--sky);font-weight:600;margin-top:0.3rem;">.docx</p></div>
+            <div class="card"><h3>/sheet</h3><p>라인시트 · OTB · BOM · KPI 트래커</p><p style="color:var(--sky);font-weight:600;margin-top:0.3rem;">.xlsx</p></div>
+            <div class="card"><h3>/pdf</h3><p>시즌북 · 테크팩 · 프레스킷 · 대시보드</p><p style="color:var(--sky);font-weight:600;margin-top:0.3rem;">.pdf</p></div>
+            <div class="card card-highlight"><h3>/deck</h3><p>트렌드 · 룩북 · 바이어 · 리포트 덱</p><p style="color:var(--sky);font-weight:600;margin-top:0.3rem;">.pptx</p></div>
+        </div>
+        <div class="code-block reveal" style="margin-top:var(--content-gap)">
+            <span class="cmd">/doc</span> campaign-plan &nbsp;&nbsp;<span class="comment"># 캠페인 기획서</span><br>
+            <span class="cmd">/sheet</span> line-sheet &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># 라인시트 엑셀</span><br>
+            <span class="cmd">/pdf</span> season-book &nbsp;&nbsp;&nbsp;<span class="comment"># 시즌 북 PDF</span>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 09 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">09</div>
+        <h2 class="reveal">교정 & 브랜드 보이스</h2>
+        <p class="section-desc reveal">/proofread + copywriting — 문법 교정 · 금지 어휘 감지 · 채널별 톤 가이드</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">25분</span>
+            <span class="meta-tag audience">마케팅 · 콘텐츠</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">✍️</span> 브랜드 감도 = 일관된 보이스</h2>
+        <div class="grid-2 reveal">
+            <div class="card" style="border-left:3px solid #EF4444;">
+                <h3 style="color:#EF4444;">금지 어휘 ❌</h3>
+                <ul>
+                    <li>"저렴한" → <strong>합리적인 프라이스</strong></li>
+                    <li>"평범한" → <strong>기존의 룰을 깨는</strong></li>
+                    <li>"짝퉁" / "따라하기" → 절대 불가</li>
+                    <li>"기본에 충실" → <strong>에센셜을 새롭게 해석</strong></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>채널별 톤 가이드</h3>
+                <table class="mini-table">
+                    <tr><th>채널</th><th>톤</th><th>길이</th></tr>
+                    <tr><td>인스타</td><td>감성적</td><td>2~3줄</td></tr>
+                    <tr><td>TikTok</td><td>임팩트</td><td>1~2줄</td></tr>
+                    <tr><td>자사몰</td><td>강렬+CTA</td><td>헤드+서브</td></tr>
+                    <tr><td>보도자료</td><td>프로페셔널</td><td>1~2페이지</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 10 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">10</div>
+        <h2 class="reveal">경쟁 분석 & 전략 프레임워크</h2>
+        <p class="section-desc reveal">/market-scan 으로 SWOT + PESTLE + Porter's + Ansoff 4개 통합 실행</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">35분</span>
+            <span class="meta-tag audience">전략 · MD</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🔍</span> 전략 분석 파이프라인</h2>
+        <div class="flow reveal" style="margin-bottom:var(--content-gap);">
+            <span class="flow-step active">/market-scan</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">/competitive</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">/battlecard</span>
+        </div>
+        <div class="grid-2 reveal">
+            <div class="card">
+                <h3>/market-scan (4개 통합)</h3>
+                <ul>
+                    <li><strong>SWOT</strong> — 강점·약점·기회·위협</li>
+                    <li><strong>PESTLE</strong> — 거시환경 6요인</li>
+                    <li><strong>Porter's</strong> — 산업 경쟁 구조</li>
+                    <li><strong>Ansoff</strong> — 성장 전략 매트릭스</li>
+                </ul>
+                <p style="margin-top:0.4rem;font-weight:600;color:var(--sky);">+ 크로스 프레임워크 수렴 시그널</p>
+            </div>
+            <div class="card">
+                <h3>/competitive → /battlecard</h3>
+                <ul>
+                    <li>직접 경쟁사 5 + 간접 3개 분석</li>
+                    <li>포지셔닝 맵 (2×2 매트릭스)</li>
+                    <li>차별화 기회 도출</li>
+                    <li>바이어용 비교표 + 반론 스크립트</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 11 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">11</div>
+        <h2 class="reveal">고객 리서치 종합</h2>
+        <p class="section-desc reveal">/research-users → 페르소나 + 세그먼트 + 여정맵 한번에 실행</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">30분</span>
+            <span class="meta-tag audience">마케팅 · CX</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">👥</span> 리서치 3종 통합 + 피드백 분석</h2>
+        <div class="grid-2 reveal">
+            <div>
+                <div class="card" style="margin-bottom:var(--content-gap)">
+                    <h3>/research-users (3-in-1)</h3>
+                    <ul>
+                        <li><strong>페르소나</strong> — JTBD 기반 3~4개</li>
+                        <li><strong>세그먼테이션</strong> — 행동 기반 분류</li>
+                        <li><strong>고객 여정 맵</strong> — 인지→옹호 6단계</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>/interview</h3>
+                    <p>The Mom Test 기반 인터뷰 스크립트 생성 + JTBD 결과 요약</p>
+                </div>
+            </div>
+            <div>
+                <div class="card card-sky">
+                    <h3>/analyze-feedback</h3>
+                    <ul>
+                        <li>감성 스코어링 (긍정/중립/부정)</li>
+                        <li>테마 추출 + 클러스터링</li>
+                        <li>세그먼트별 감성 차이</li>
+                        <li>시간에 따른 트렌드 감지</li>
+                    </ul>
+                    <p style="margin-top:0.4rem;font-size:var(--small-size);color:var(--gray-400);">CSV, 텍스트, 파일 모든 형식 지원</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 12 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">12</div>
+        <h2 class="reveal">데이터 분석 & 대시보드</h2>
+        <p class="section-desc reveal">/north-star → /metrics → sales-analysis → /cohorts → /ab-test</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">35분</span>
+            <span class="meta-tag audience">데이터 · MD</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">📊</span> 메트릭스 4단계 프레임워크</h2>
+        <div class="grid-4 reveal">
+            <div class="card card-highlight">
+                <h3>North Star</h3>
+                <p>성공의 <strong>단일 지표</strong></p>
+                <p style="font-size:var(--small-size);color:var(--gray-400);">1개</p>
+            </div>
+            <div class="card">
+                <h3>인풋 메트릭</h3>
+                <p>NSM을 구동하는 <strong>레버</strong></p>
+                <p style="font-size:var(--small-size);color:var(--gray-400);">3~5개</p>
+            </div>
+            <div class="card">
+                <h3>헬스 메트릭</h3>
+                <p>안정적이어야 하는 <strong>지표</strong></p>
+                <p style="font-size:var(--small-size);color:var(--gray-400);">3~5개</p>
+            </div>
+            <div class="card">
+                <h3>카운터 메트릭</h3>
+                <p>잘못된 최적화 <strong>방지</strong></p>
+                <p style="font-size:var(--small-size);color:var(--gray-400);">1~2개</p>
+            </div>
+        </div>
+        <div class="grid-3 reveal" style="margin-top:var(--content-gap)">
+            <div class="code-block"><span class="cmd">/north-star</span><br><span class="comment"># 핵심 지표 정의</span></div>
+            <div class="code-block"><span class="cmd">/cohorts</span><br><span class="comment"># 리텐션 · 재구매 · LTV</span></div>
+            <div class="code-block"><span class="cmd">/ab-test</span><br><span class="comment"># 통계 유의성 + 의사결정</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 13 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">13</div>
+        <h2 class="reveal">OKR & 스프린트 관리</h2>
+        <p class="section-desc reveal">/okrs → /roadmap → /stakeholders → /sprint plan · retro · release</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">30분</span>
+            <span class="meta-tag audience">관리자 · 리더</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🎯</span> 분기 사이클</h2>
+        <div class="flow reveal" style="margin-bottom:var(--content-gap)">
+            <span class="flow-step active">/okrs</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">/roadmap</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">/stakeholders</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">/sprint plan</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">/sprint retro</span>
+        </div>
+        <div class="grid-2 reveal">
+            <div class="card">
+                <h3>/okrs — 5대 경영목표 연결</h3>
+                <ul>
+                    <li>목표(O) = 정성적, 영감적</li>
+                    <li>핵심결과(KR) = 정량적, 측정 가능</li>
+                    <li>70% 달성 = 잘 보정된 목표</li>
+                    <li>게이밍 방지 카운터 메트릭</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>/sprint — 3가지 모드</h3>
+                <ul>
+                    <li><strong>plan</strong> — 용량 배분 + 스토리 선택</li>
+                    <li><strong>retro</strong> — Start/Stop/Continue, 4Ls, Sailboat</li>
+                    <li><strong>release</strong> — 릴리즈 노트 자동 생성</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 14 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">14</div>
+        <h2 class="reveal">디스커버리 & 아이디에이션</h2>
+        <p class="section-desc reveal">/discover → 아이디어 → 가설 → 실험 전체 사이클 · /pre-mortem 리스크 점검</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">30분</span>
+            <span class="meta-tag audience">기획 · 전략</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">💡</span> 디스커버리 5단계 + 프리모템</h2>
+        <div class="flow reveal" style="margin-bottom:var(--content-gap)">
+            <span class="flow-step">기회 탐색</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step active">아이디어 발산</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">가정 식별</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">우선순위</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">실험 설계</span>
+        </div>
+        <div class="grid-2 reveal">
+            <div class="card">
+                <h3>/brainstorm — 4가지 관점</h3>
+                <ul>
+                    <li><strong>고객</strong> — 해결 못 하는 문제</li>
+                    <li><strong>경쟁</strong> — 안 하고 있는 것</li>
+                    <li><strong>기술</strong> — 새로 가능해진 것</li>
+                    <li><strong>트렌드</strong> — 연결할 수 있는 것</li>
+                </ul>
+            </div>
+            <div class="card card-highlight">
+                <h3>/pre-mortem — 리스크 3분류</h3>
+                <ul>
+                    <li><strong style="color:#EF4444;">Tigers</strong> — 확실히 위험 → 즉시 완화</li>
+                    <li><strong style="color:var(--gray-400);">Paper Tigers</strong> — 위험해 보이지만 아님</li>
+                    <li><strong style="color:var(--sky);">Elephants</strong> — 모두 알지만 말 안 하는 것</li>
+                </ul>
+                <p style="margin-top:0.4rem;font-weight:600;">→ Go / Conditional Go / No-Go 판단</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SESSION 15 ========== -->
+<section class="slide slide-section" data-section>
+    <div class="slide-content">
+        <div class="section-number reveal">15</div>
+        <h2 class="reveal">플러그인 에코시스템</h2>
+        <p class="section-desc reveal">31개 플러그인 프로젝트 통합 · 7개 마켓플레이스 · 이중 라우팅 · @도메인 호출</p>
+        <div class="section-meta reveal">
+            <span class="meta-tag time">35분</span>
+            <span class="meta-tag audience">전원</span>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🔌</span> 플러그인 전체 맵 — 31개</h2>
+        <div class="grid-2 reveal">
+            <div class="card">
+                <h3>공식 플러그인 — 7개</h3>
+                <ul>
+                    <li><strong>telegram</strong> — 텔레그램 메시징 연동</li>
+                    <li><strong>commit-commands</strong> — Git 커밋·푸시·PR</li>
+                    <li><strong>github</strong> — 이슈/PR 관리</li>
+                    <li><strong>figma</strong> — 디자인 시스템 연동</li>
+                    <li><strong>supabase</strong> — DB 연동</li>
+                    <li><strong>Notion</strong> — 문서 연동</li>
+                    <li><strong>vercel</strong> — 배포/관리</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>전문 도구 — 6개</h3>
+                <ul>
+                    <li><strong>document-skills</strong> — PDF·PPTX·DOCX·XLSX</li>
+                    <li><strong>frontend-design</strong> — UI 디자인 가이드</li>
+                    <li><strong>claude-mem</strong> — 대화 메모리</li>
+                    <li><strong>claude-dashboard</strong> — AI 사용량</li>
+                    <li><strong>postgres-best-practices</strong> — DB 최적화</li>
+                    <li><strong>obsidian</strong> — 노트 연동</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🏢</span> Knowledge-Work 플러그인 — 18개 도메인</h2>
+        <div class="grid-2 reveal">
+            <div class="card">
+                <h3>비즈니스 핵심</h3>
+                <ul>
+                    <li><strong>sales</strong> — 바이어 미팅, 파이프라인</li>
+                    <li><strong>marketing</strong> — SEO, 캠페인, 이메일</li>
+                    <li><strong>product-management</strong> — 스펙, 스프린트</li>
+                    <li><strong>finance</strong> — 분개, 결산, SOX</li>
+                    <li><strong>legal</strong> — 계약검토, 컴플라이언스</li>
+                    <li><strong>human-resources</strong> — 채용, 보상, 온보딩</li>
+                    <li><strong>operations</strong> — 프로세스, 런북</li>
+                    <li><strong>engineering</strong> — 코드리뷰, 아키텍처</li>
+                    <li><strong>data</strong> — SQL, 시각화, 대시보드</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>확장 도메인</h3>
+                <ul>
+                    <li><strong>design</strong> — 접근성, UX 카피</li>
+                    <li><strong>customer-support</strong> — 티켓, 에스컬레이션</li>
+                    <li><strong>enterprise-search</strong> — 크로스플랫폼 검색</li>
+                    <li><strong>productivity</strong> — 태스크, 메모리</li>
+                    <li><strong>brand-voice</strong> — 가이드라인, 톤</li>
+                    <li><strong>apollo</strong> — ICP→리드 파이프라인</li>
+                    <li><strong>common-room</strong> — 어카운트 리서치</li>
+                    <li><strong>slack-by-salesforce</strong> — 채널 요약</li>
+                    <li><strong>cowork-plugin-management</strong> — 플러그인 생성</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="slide slide-content-type">
+    <div class="slide-content">
+        <h2 class="reveal"><span class="icon">🔀</span> 이중 라우팅 — FPOF vs KW 플러그인</h2>
+        <div class="flow reveal" style="margin-bottom:var(--content-gap)">
+            <span class="flow-step">자연어 요청</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step active">컨텍스트 판단</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">스킬 라우팅</span>
+        </div>
+        <div class="grid-2 reveal">
+            <div class="card card-highlight">
+                <h3>FPOF 내장 스킬 (82개)</h3>
+                <ul>
+                    <li>와키윌리 / 시즌 / PDCA 키워드</li>
+                    <li>브랜드 프리셋 참조 필요</li>
+                    <li>상품기획 · 마케팅 · 크리에이티브</li>
+                    <li>예: "시즌 테마 잡아줘" → <code>brand-strategy</code></li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>KW 플러그인 (118개 스킬)</h3>
+                <ul>
+                    <li>HR · 법무 · 재무 · 엔지니어링 · 운영</li>
+                    <li>범용 비즈니스 프레임워크</li>
+                    <li>명시적 호출: <code>@도메인</code> 접두사</li>
+                    <li>예: "@legal 계약서 검토해줘"</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card reveal" style="margin-top:var(--content-gap);background:var(--gray-100);padding:0.8rem 1.2rem;font-size:var(--small-size);">
+            <strong>프로젝트 설정:</strong> <code>.claude/settings.json</code> → <code>enabledPlugins</code> (31개) + <code>extraKnownMarketplaces</code> (7개) · git clone만으로 자동 활성화
+        </div>
+    </div>
+</section>
+
+<!-- ========== CLOSING ========== -->
+<section class="slide slide-closing">
+    <div class="slide-content" style="align-items:center;">
+        <h2 class="reveal">AI로 <span class="accent">판을 설계</span>하는<br>패션 하우스</h2>
+        <div class="divider reveal" style="margin:0 auto;"></div>
+        <p class="reveal">FPOF V2.2 · 15개 세션 · 31개 플러그인 · 200+ 스킬 · 40+ 슬래시 명령어</p>
+        <p class="reveal" style="margin-top:0.5rem;">비케이브 AI Committee Workshop 2026</p>
+    </div>
+</section>
+
+<script>
+/* ==========================================
+   SLIDE PRESENTATION CONTROLLER
+   Navigation, animations, progress tracking
+   ========================================== */
+class SlidePresentation {
+    constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.totalSlides = this.slides.length;
+        this.currentSlide = 0;
+        this.isScrolling = false;
+
+        this.buildNavDots();
+        this.setupObserver();
+        this.setupKeyboard();
+        this.setupTouch();
+        this.updateCounter();
+    }
+
+    buildNavDots() {
+        const nav = document.getElementById('navDots');
+        this.slides.forEach((slide, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'nav-dot' + (slide.hasAttribute('data-section') ? ' section-dot' : '');
+            dot.setAttribute('aria-label', `Slide ${i + 1}`);
+            dot.addEventListener('click', () => this.goToSlide(i));
+            nav.appendChild(dot);
+        });
+        this.dots = nav.querySelectorAll('.nav-dot');
+    }
+
+    setupObserver() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    const index = Array.from(this.slides).indexOf(entry.target);
+                    this.currentSlide = index;
+                    this.updateUI();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        this.slides.forEach(slide => observer.observe(slide));
+    }
+
+    setupKeyboard() {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                this.goToSlide(Math.min(this.currentSlide + 1, this.totalSlides - 1));
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                this.goToSlide(Math.max(this.currentSlide - 1, 0));
+            }
+        });
+    }
+
+    setupTouch() {
+        let startY = 0;
+        document.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+            const diff = startY - e.changedTouches[0].clientY;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) this.goToSlide(Math.min(this.currentSlide + 1, this.totalSlides - 1));
+                else this.goToSlide(Math.max(this.currentSlide - 1, 0));
+            }
+        }, { passive: true });
+    }
+
+    goToSlide(index) {
+        this.slides[index].scrollIntoView({ behavior: 'smooth' });
+    }
+
+    updateUI() {
+        // Progress
+        const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+
+        // Dots
+        this.dots.forEach((dot, i) => dot.classList.toggle('active', i === this.currentSlide));
+
+        // Counter
+        this.updateCounter();
+    }
+
+    updateCounter() {
+        document.getElementById('slideCounter').textContent =
+            `${this.currentSlide + 1} / ${this.totalSlides}`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+</script>
+
+</body>
+</html>
